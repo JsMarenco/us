@@ -1,0 +1,59 @@
+{
+  "name": "",
+  "short_name": "",
+  "description": "",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": [],
+  "screenshots": [
+    {
+      "src": "/assets/thumbnails/home.png",
+      "sizes": "1366x768",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "icons": [
+    {
+      "src": "/assets/icons/maskable_icon_x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/maskable_icon_x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/maskable_icon_x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/maskable_icon_x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/maskable_icon_x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/maskable_icon_x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/maskable_icon_x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "scope": "/",
+  "related_applications": []
+}

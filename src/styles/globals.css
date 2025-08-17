@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+.scrollbar {
+  @apply overflow-auto rounded-lg;
+
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 #f1f5f9;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  @apply rounded-lg;
+  background-color: #94a3b8;
+  border: 3px solid #f1f5f9;
+}
+
+:where(.dark, .dark *) .scrollbar {
+  scrollbar-color: #4b5563 #1f2937;
+}
+
+:where(.dark, .dark *) .scrollbar::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+:where(.dark, .dark *) .scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+  border: 3px solid #1f2937;
+}
+
+html {
+  scroll-behavior: smooth;
+}

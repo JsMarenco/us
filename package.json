@@ -1,0 +1,63 @@
+{
+  "name": "astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "eslint --format 'table' src --ext .js,.ts,.mjs,.cjs --fix",
+    "prisma:studio": "npx prisma studio",
+    "prisma:migrate": "npx prisma db push",
+    "prisma:seed": "npx prisma db seed",
+    "postinstall": "npx prisma generate"
+  },
+  "lint-staged": {
+    "**/*": "npm run lint"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "4.3.0",
+    "@astrojs/react": "4.3.0",
+    "@astrojs/sitemap": "3.4.1",
+    "@astrojs/vercel": "8.2.0",
+    "@prisma/client": "6.14.0",
+    "@tailwindcss/vite": "4.1.10",
+    "astro": "5.10.1",
+    "clsx": "2.1.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-icons": "5.5.0",
+    "tailwind-merge": "3.3.1",
+    "tailwindcss": "4.1.10",
+    "uuid": "11.1.0",
+    "zod": "4.0.17"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.30.0",
+    "@types/node": "24.0.4",
+    "@typescript-eslint/eslint-plugin": "8.35.0",
+    "@typescript-eslint/parser": "8.35.0",
+    "astro-eslint-parser": "1.2.2",
+    "eslint": "9.30.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-airbnb-base-typescript": "1.1.0",
+    "eslint-config-airbnb-typescript": "18.0.0",
+    "eslint-config-prettier": "10.1.5",
+    "eslint-formatter-table": "7.32.1",
+    "eslint-plugin-astro": "1.3.1",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-prettier": "5.5.1",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-unused-imports": "4.1.4",
+    "globals": "16.2.0",
+    "husky": "9.1.7",
+    "lint-staged": "16.1.2",
+    "prettier": "3.6.2",
+    "prettier-plugin-astro": "0.14.1",
+    "prettier-plugin-tailwindcss": "0.6.13",
+    "prisma": "6.14.0",
+    "tsx": "4.20.4",
+    "typescript-eslint": "8.35.0"
+  }
+}

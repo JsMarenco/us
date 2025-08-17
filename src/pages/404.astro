@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Main.astro";
+---
+
+<Layout containerClassnames="flex items-center justify-center">
+  <div class="text-center transition-colors duration-200">
+    <h1 class="text-6xl font-bold text-indigo-600 dark:text-indigo-400">404</h1>
+
+    <h2 class="mt-4 text-2xl font-semibold">Page not found</h2>
+
+    <p class="mt-2 text-base text-gray-600 dark:text-gray-400">
+      Sorry, we couldn't find the page you're looking for.
+    </p>
+
+    <div class="mt-6">
+      <a
+        class="inline-block rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
+        href="/"
+      >
+        Go back home
+      </a>
+    </div>
+  </div>
+</Layout>

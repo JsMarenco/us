@@ -1,0 +1,79 @@
+---
+// Third-party dependencies
+import { ClientRouter } from "astro:transitions";
+
+// Current project dependencies
+import "../../styles/globals.css";
+
+type Props = {
+  title?: string;
+  description?: string;
+  image?: string;
+};
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteName = import.meta.env.PUBLIC_SITE_NAME;
+
+const { title = "", description = "", image = "" } = Astro.props;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta content="width=device-width,initial-scale=1" name="viewport" />
+<meta content={Astro.generator} name="generator" />
+
+<link
+  href="/assets/icons/maskable_icon_x128.png"
+  rel="icon"
+  type="image/svg+xml"
+/>
+
+<link href="/sitemap-index.xml" rel="sitemap" />
+
+<link
+  href={new URL("rss.xml", Astro.site)}
+  rel="alternate"
+  title={title}
+  type="application/rss+xml"
+/>
+
+<!-- Font preloads -->
+<link
+  as="font"
+  href="/fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf"
+  rel="preload"
+  type="font/ttf"
+/>
+<link
+  as="font"
+  href="/fonts/Roboto/Roboto-Italic-VariableFont_wdth,wght.ttf"
+  rel="preload"
+  type="font/ttf"
+/>
+
+<!-- Canonical URL -->
+<link href={canonicalURL} rel="canonical" />
+
+<!-- Primary Meta Tags -->
+<title>{title || "N/A Title"} | {siteName || "N/A Site Name"}</title>
+<meta content={title} name="title" />
+<meta content={description} name="description" />
+
+<!-- Open Graph / Facebook -->
+<meta content="website" property="og:type" />
+<meta content={Astro.url} property="og:url" />
+<meta content={title} property="og:title" />
+<meta content={description} property="og:description" />
+<meta content={new URL(image, Astro.url)} property="og:image" />
+
+<!-- Twitter -->
+<meta content="summary_large_image" property="twitter:card" />
+<meta content={Astro.url} property="twitter:url" />
+<meta content={title} property="twitter:title" />
+<meta content={description} property="twitter:description" />
+<meta content={new URL(image, Astro.url)} property="twitter:image" />
+
+<!-- Manifest -->
+<link href="/manifest.json" rel="manifest" />
+
+<ClientRouter />
