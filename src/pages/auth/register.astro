@@ -1,0 +1,13 @@
+---
+import RegisterForm from "../../components/Forms/Register";
+import Auth from "../../layouts/Auth.astro";
+---
+
+<Auth
+  bgImage="/assets/backgrounds/register.png"
+  description="Crea una nueva cuenta para acceder y empezar a cuidar el planeta."
+  image="/assets/backgrounds/register.png"
+  title="Registrarse"
+>
+  <RegisterForm client:load />
+</Auth>

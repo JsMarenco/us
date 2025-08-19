@@ -1,0 +1,60 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import Layout from "../../layouts/Main.astro";
+import prisma from "../../lib/prisma";
+import timeAgo from "../../utils/timeAgo";
+
+const futurePlans = await prisma.futurePlan.findMany({
+  include: {
+    proposer: true,
+  },
+});
+---
+
+<Layout
+  description="Explora los planes futuros."
+  image="/assets/thumbnails/home.png"
+  title={`Planes Futuros (${futurePlans.length})`}
+>
+  {
+    futurePlans.length === 0 ? (
+      <p class="text-center text-gray-600 dark:text-gray-300">
+        No hay planes futuros aún.
+      </p>
+    ) : (
+      <div class="mx-auto max-w-5xl columns-1 gap-3 space-y-3 sm:columns-2">
+        {futurePlans.map((plan) => (
+          <div class="inline-block w-full break-inside-avoid rounded-xl border border-white/30 bg-white/20 p-4 shadow-md backdrop-blur-md transition hover:shadow-lg dark:border-gray-700/50 dark:bg-gray-800/30">
+            {plan.title && (
+              <h3 class="mb-1 line-clamp-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {plan.title}
+              </h3>
+            )}
+
+            <p class="mb-3 text-gray-700 dark:text-gray-300">
+              {plan.description && plan.description?.length > 160
+                ? plan.description?.slice(0, 160) + "..."
+                : plan.description || "Sin descripción."}
+            </p>
+
+            <div class="mt-2 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+              <span>
+                Propuesto por:{" "}
+                <strong class="text-gray-900 dark:text-gray-100">
+                  {`${plan.proposer.firstName} ${plan.proposer.lastName}`}
+                </strong>
+              </span>
+              <span class="ml-2">
+                {plan.dueDate
+                  ? `Para el ${new Date(plan.dueDate).toLocaleDateString()}`
+                  : `Creado ${timeAgo(plan.createdAt)}`}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+</Layout>

@@ -1,0 +1,15 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import Layout from "../../layouts/Main.astro";
+import FuturePlanForm from "../../components/Forms/FuturePlan";
+---
+
+<Layout
+  description="Crea nuevos planes futuros para organizarlos mejor."
+  image="/assets/thumbnails/home.png"
+  title="Crear Plan Futuro"
+>
+  <FuturePlanForm client:load />
+</Layout>

@@ -1,0 +1,55 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import Layout from "../../layouts/Main.astro";
+import prisma from "../../lib/prisma";
+import timeAgo from "../../utils/timeAgo";
+
+const deyopatus = await prisma.deYoPaTu.findMany({
+  include: {
+    creator: true,
+  },
+});
+---
+
+<Layout
+  description="Lee los DeYoPaTus creados para vos o por vos."
+  image="/assets/thumbnails/home.png"
+  title={`DeYoPaTus (${deyopatus.length})`}
+>
+  <div class="space-y-6">
+    {
+      deyopatus.length === 0 ? (
+        <p class="text-center text-gray-600 dark:text-gray-300">
+          No hay DeYoPaTus aún.
+        </p>
+      ) : (
+        <div class="mx-auto max-w-5xl columns-1 gap-4 space-y-4 sm:columns-2">
+          {deyopatus.map((dy) => (
+            <a
+              class="mb-4 inline-block w-full break-inside-avoid rounded-xl border border-gray-200/60 bg-white/40 p-4 shadow-sm backdrop-blur-sm transition hover:bg-white/70 hover:shadow-md dark:border-gray-700/50 dark:bg-gray-800/40 dark:hover:bg-gray-800/70"
+              href={`/de-yo-pa-tu/${dy.id}`}
+            >
+              {dy.title && (
+                <h3 class="mb-1 line-clamp-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  {dy.title}
+                </h3>
+              )}
+
+              <p class="mb-3 truncate text-gray-700 dark:text-gray-300">
+                {dy.content.length > 160
+                  ? dy.content.slice(0, 160) + "..."
+                  : dy.content}
+              </p>
+
+              <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                <span class="">{timeAgo(dy.writtenAt)}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</Layout>

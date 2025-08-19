@@ -1,0 +1,13 @@
+---
+import LoginForm from "../../components/Forms/Login";
+import Auth from "../../layouts/Auth.astro";
+---
+
+<Auth
+  bgImage="/assets/backgrounds/login.png"
+  description="Inicia sesión para acceder a tu cuenta y funciones exclusivas."
+  image="/assets/backgrounds/login.png"
+  title="Iniciar sesión"
+>
+  <LoginForm client:load />
+</Auth>

@@ -1,15 +1,87 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["rhel-openssl-3.0.x"]
+  binaryTargets = ["rhel-openssl-3.0.x", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+enum PlanPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum PlanStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  username       String  @unique
+  email          String  @unique
+  hashedPassword String
+  firstName      String?
+  lastName       String?
+  avatarSrc      String? @default("https://i.pravatar.cc/300")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  receivedDeYoPaTus DeYoPaTu[] @relation("ReceivedDeYoPatus")
+  createdDeYoPaTus  DeYoPaTu[] @relation("CreatedDeYoPaTus")
+
+  FuturePlan FuturePlan[] @relation("ProposedPlans")
+}
+
+model AvatarPair {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  imageSrcOne String
+  imageSrcTwo String
+
+  takenAt DateTime
+  caption String?  @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DeYoPaTu {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  creatorId   String @db.ObjectId
+  recipientId String @db.ObjectId
+
+  title                String?  @default("")
+  spotifyEmbedTrackSrc String?  @default("")
+  content              String
+  writtenAt            DateTime
+
+  creator   User @relation("CreatedDeYoPaTus", fields: [creatorId], references: [id])
+  recipient User @relation("ReceivedDeYoPatus", fields: [recipientId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FuturePlan {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  title       String
+  description String?
+  status      PlanStatus   @default(PENDING)
+  priority    PlanPriority @default(HIGH)
+  dueDate     DateTime?
+
+  proposerId String @db.ObjectId
+  proposer   User   @relation("ProposedPlans", fields: [proposerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

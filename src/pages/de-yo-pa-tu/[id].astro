@@ -1,0 +1,162 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import prisma from "../../lib/prisma";
+import Layout from "../../layouts/Main.astro";
+import type { DeYoPaTu } from "../../schemas/deyopatu";
+import timeAgo from "../../utils/timeAgo";
+import type { User } from "../../schemas/user";
+
+interface Props {
+  deyopatu: DeYoPaTu;
+  prevDeYoPaTuLink: string | null;
+  nextDeYoPaTuLink: string | null;
+  currentIndex: number;
+  total: number;
+  creator: User;
+  recipient: User;
+}
+
+export async function getStaticPaths() {
+  const deyopatus = await prisma.deYoPaTu.findMany({
+    include: {
+      creator: true,
+      recipient: true,
+    },
+    orderBy: {
+      writtenAt: "desc",
+    },
+  });
+
+  return deyopatus.map((dy, index) => {
+    const slug = dy.id;
+
+    const prevDeYoPaTuLink = deyopatus[index - 1]?.id || null;
+    const nextDeYoPaTuLink = deyopatus[index + 1]?.id || null;
+
+    return {
+      params: { id: slug },
+      props: {
+        deyopatu: dy,
+        prevDeYoPaTuLink,
+        nextDeYoPaTuLink,
+        currentIndex: index,
+        total: deyopatus.length,
+        creator: dy.creator,
+        recipient: dy.recipient,
+      },
+    };
+  });
+}
+
+const { deyopatu, prevDeYoPaTuLink, nextDeYoPaTuLink, currentIndex, total } =
+  Astro.props as Props;
+
+const maxLength = 157;
+const description =
+  deyopatu.content.length > maxLength
+    ? deyopatu.content.slice(0, maxLength) + "..."
+    : deyopatu.content + "...";
+---
+
+<Layout
+  description={description}
+  image="/assets/thumbnails/home.png"
+  title={deyopatu.title || "De Yo Pa Tu"}
+>
+  <div class="flex flex-col items-center gap-2">
+    <div class="w-full max-w-3xl flex-1 space-y-3 overflow-auto text-center">
+      <div
+        class="w-full max-w-3xl flex-1 space-y-3 overflow-auto rounded-lg p-6 text-center"
+      >
+        {
+          deyopatu.title && (
+            <h1 class="text-4xl font-bold text-teal-700 dark:text-teal-400">
+              {deyopatu.title}
+            </h1>
+          )
+        }
+
+        <p
+          class="text-center whitespace-pre-wrap text-gray-700 dark:text-gray-300"
+        >
+          {deyopatu.content}
+        </p>
+
+        <div
+          class="mt-4 flex flex-col items-center justify-center gap-2 text-sm text-gray-500 sm:flex-row sm:items-center dark:text-gray-400"
+        >
+          <span>{timeAgo(deyopatu.writtenAt)}</span>
+        </div>
+      </div>
+
+      {
+        deyopatu.spotifyEmbedTrackSrc && (
+          <div class="relative overflow-hidden rounded-lg bg-white/5 backdrop-blur-sm">
+            <iframe
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              class="w-full rounded-lg"
+              frameborder="0"
+              height="152"
+              loading="lazy"
+              src={deyopatu.spotifyEmbedTrackSrc}
+              title={`Spotify track for ${deyopatu.title || "De Yo Pa Tu"}`}
+              width="100%"
+            />
+          </div>
+        )
+      }
+
+      <div class="mx-auto mt-4 flex w-full max-w-3xl flex-col gap-4">
+        <div
+          class="flex justify-center text-lg font-semibold text-teal-600 sm:hidden dark:text-teal-400"
+        >
+          <span>
+            {currentIndex + 1} / {total}
+          </span>
+        </div>
+
+        <div
+          class="flex flex-col gap-4 text-lg font-semibold md:flex-row md:items-center md:justify-between"
+        >
+          {
+            prevDeYoPaTuLink ? (
+              <a
+                class="w-full rounded-xl border border-gray-200/50 bg-gray-100/70 px-6 py-3 text-center font-semibold text-teal-700 shadow-md backdrop-blur-sm transition-colors hover:bg-teal-600 hover:text-white hover:shadow-lg sm:w-auto dark:border-gray-700/50 dark:bg-gray-800/70 dark:text-gray-100 dark:hover:bg-teal-600"
+                href={prevDeYoPaTuLink}
+              >
+                Anterior
+              </a>
+            ) : (
+              <span class="w-full rounded-xl border border-gray-200/50 bg-gray-300/50 px-6 py-3 text-center font-semibold text-gray-500 opacity-60 backdrop-blur-sm sm:w-auto dark:border-gray-700/50 dark:bg-gray-700/50 dark:text-gray-400">
+                Anterior
+              </span>
+            )
+          }
+
+          <div class="hidden flex-1 justify-center md:flex">
+            <span class="text-gray-600 dark:text-gray-300">
+              {currentIndex + 1} / {total}
+            </span>
+          </div>
+
+          {
+            nextDeYoPaTuLink ? (
+              <a
+                class="w-full rounded-xl border border-gray-200/50 bg-gray-100/70 px-6 py-3 text-center font-semibold text-teal-700 shadow-md backdrop-blur-sm transition-colors hover:bg-teal-600 hover:text-white hover:shadow-lg sm:w-auto dark:border-gray-700/50 dark:bg-gray-800/70 dark:text-gray-100 dark:hover:bg-teal-600"
+                href={nextDeYoPaTuLink}
+              >
+                Siguiente
+              </a>
+            ) : (
+              <span class="w-full rounded-xl border border-gray-200/50 bg-gray-300/50 px-6 py-3 text-center font-semibold text-gray-500 opacity-60 backdrop-blur-sm sm:w-auto dark:border-gray-700/50 dark:bg-gray-700/50 dark:text-gray-400">
+                Siguiente
+              </span>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

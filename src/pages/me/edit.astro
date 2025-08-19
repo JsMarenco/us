@@ -1,0 +1,15 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import Layout from "../../layouts/Main.astro";
+import EditUserForm from "../../components/Forms/EditUser";
+---
+
+<Layout
+  description="Edita tu perfil, actualiza tu información y cambia tu contraseña si lo deseas."
+  image="/assets/thumbnails/home.png"
+  title="Editar perfil"
+>
+  <EditUserForm client:load />
+</Layout>

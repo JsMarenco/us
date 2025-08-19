@@ -1,0 +1,49 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import AvatarsCard from "../components/Cards/Avatars/index";
+import Layout from "../layouts/Main.astro";
+import prisma from "../lib/prisma";
+
+const avatars = await prisma.avatarPair.findMany();
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(new Date(date));
+};
+---
+
+<Layout
+  description="Gracias por tomarte el tiempo de crearlos, gastar lo más valioso: tu tiempo."
+  image="/assets/backgrounds/avatars.png"
+  title={`Avatares (${avatars.length} ${avatars.length === 1 ? "foto" : "fotos"})`}
+>
+  <section class="mx-auto flex max-w-4xl flex-col items-center p-6">
+    {
+      avatars.map((avatar, index) => (
+        <>
+          <div class="relative w-full max-w-lg">
+            <AvatarsCard
+              caption={avatar.caption || ""}
+              client:only={true}
+              imageSrcOne={avatar.imageSrcOne}
+              imageSrcTwo={avatar.imageSrcTwo}
+              takenAt={formatDate(avatar.takenAt)}
+            />
+          </div>
+
+          {index < avatars.length - 1 && (
+            <div
+              class="w-[2px] bg-gray-300 dark:bg-gray-600"
+              style={{ height: "50px" }}
+            />
+          )}
+        </>
+      ))
+    }
+  </section>
+</Layout>

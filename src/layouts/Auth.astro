@@ -3,44 +3,30 @@
 
 // Current project dependencies
 import BaseHead from "../components/Common/BaseHead.astro";
-import Header from "../components/Common/Header.astro";
 import ScrollTop from "../components/Buttons/ScrollTop";
 import ThemeSwitcher from "../components/Buttons/ThemeSwitcher";
-import cn from "../utils/cn";
-import AuthGuard from "../components/Common/AuthGuard";
 
 type Props = {
   title?: string;
   description?: string;
   image?: string;
   containerClassnames?: string;
+  bgImage?: string;
 };
 
-const {
-  title = "",
-  description = "",
-  image = "",
-  containerClassnames,
-} = Astro.props;
+const { title = "", description = "", image = "", bgImage = "" } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="es">
   <head>
     <BaseHead description={description} image={image} title={title} />
   </head>
 
   <body
-    class="flex min-h-screen flex-col bg-gray-50 text-black transition-colors duration-200 dark:bg-gray-950 dark:text-white"
+    class="flex min-h-screen min-w-screen items-center justify-center overflow-hidden text-black transition-colors duration-200 dark:text-white"
   >
-    <AuthGuard client:only="AuthGuard" />
-
-    <Header />
-
     <main
-      class:list={cn(
-        "mx-auto w-full max-w-4xl flex-1 overflow-auto p-2",
-        containerClassnames || "",
-      )}
+      class="fixed inset-0 mx-5 flex items-center justify-center"
       transition:animate="fade"
     >
       <slot />
@@ -52,5 +38,13 @@ const {
       <ScrollTop client:load />
       <ThemeSwitcher client:load />
     </div>
+
+    <div
+      class="background-moving fixed inset-0 -z-20"
+      style={`background-image: url('${bgImage}'); background-size: cover; background-position: center;`}
+    >
+    </div>
+
+    <div class="fixed inset-0 -z-10 bg-black/70"></div>
   </body>
 </html>
