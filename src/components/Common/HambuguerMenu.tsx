@@ -38,7 +38,7 @@ const HamburgerMenu = () => {
 
             <motion.div
               className={cn(
-                "fixed top-0 left-0 z-50 h-full w-[45vw] max-w-[300px] min-w-[65%]",
+                "fixed top-0 left-0 z-50 h-full w-[45vw] max-w-[300px] min-w-[65%] md:min-w-[55%] lg:min-w-[25%]",
                 "flex flex-col bg-white shadow-lg dark:bg-black",
               )}
               initial={{ x: "-100%" }}
