@@ -39,7 +39,8 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       });
     }
 
-    const { title, description, status, priority, dueDate } = parsed.data;
+    const { title, description, status, priority, dueDate, thumbnailSrc } =
+      parsed.data;
 
     const newFuturePlan = await prisma.futurePlan.create({
       data: {
@@ -49,6 +50,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         status,
         priority,
         dueDate,
+        thumbnailSrc,
       },
     });
 
