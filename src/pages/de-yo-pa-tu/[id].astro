@@ -42,7 +42,10 @@ const total = allDeYoPaTu.length;
 
 <Layout
   description={description}
-  image="/assets/thumbnails/home.png"
+  image={deyopatu.thumbnailSrc
+    ? deyopatu.thumbnailSrc
+    : "/assets/thumbnails/home.png"}
+  remoteAssets={deyopatu.thumbnailSrc ? true : false}
   title={deyopatu.title || "De Yo Pa Tu"}
 >
   <div class="flex flex-col items-center gap-2">

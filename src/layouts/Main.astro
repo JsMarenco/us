@@ -14,6 +14,7 @@ type Props = {
   description?: string;
   image?: string;
   containerClassnames?: string;
+  remoteAssets?: boolean;
 };
 
 const {
@@ -21,12 +22,18 @@ const {
   description = "",
   image = "",
   containerClassnames,
+  remoteAssets = false,
 } = Astro.props;
 ---
 
 <html lang="en">
   <head>
-    <BaseHead description={description} image={image} title={title} />
+    <BaseHead
+      description={description}
+      image={image}
+      remoteAssets={remoteAssets}
+      title={title}
+    />
   </head>
 
   <body

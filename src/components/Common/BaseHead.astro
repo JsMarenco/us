@@ -9,12 +9,18 @@ type Props = {
   title?: string;
   description?: string;
   image?: string;
+  remoteAssets?: boolean;
 };
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteName = import.meta.env.PUBLIC_SITE_NAME;
 
-const { title = "", description = "", image = "" } = Astro.props;
+const {
+  title = "",
+  description = "",
+  image = "",
+  remoteAssets = false,
+} = Astro.props;
 ---
 
 <!-- Global Metadata -->
@@ -64,14 +70,20 @@ const { title = "", description = "", image = "" } = Astro.props;
 <meta content={Astro.url} property="og:url" />
 <meta content={title} property="og:title" />
 <meta content={description} property="og:description" />
-<meta content={new URL(image, Astro.url)} property="og:image" />
+<meta
+  content={remoteAssets ? image : new URL(image, Astro.url).toString()}
+  property="og:image"
+/>
 
 <!-- Twitter -->
 <meta content="summary_large_image" property="twitter:card" />
 <meta content={Astro.url} property="twitter:url" />
 <meta content={title} property="twitter:title" />
 <meta content={description} property="twitter:description" />
-<meta content={new URL(image, Astro.url)} property="twitter:image" />
+<meta
+  content={remoteAssets ? image : new URL(image, Astro.url).toString()}
+  property="twitter:image"
+/>
 
 <!-- Manifest -->
 <link href="/manifest.json" rel="manifest" />
