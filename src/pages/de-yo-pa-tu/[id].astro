@@ -10,6 +10,8 @@ import type { User } from "../../schemas/user";
 import BackgroundPortal from "../../components/Common/BackgroundPortal";
 
 export const prerender = false;
+// eslint-disable-next-line astro/no-exports-from-components
+export const ssr = true;
 
 interface Props {
   deyopatu: DeYoPaTu;
