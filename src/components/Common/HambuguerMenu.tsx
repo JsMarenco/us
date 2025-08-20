@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 
 // Current project dependencies
 import cn from "../../utils/cn";
@@ -13,6 +14,16 @@ const HamburgerMenu = () => {
   const { user, loading, error } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/api/auth/logout", {}, { withCredentials: true });
+      window.location.href = "/auth/login";
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   return (
     <div className="relative">
@@ -97,7 +108,7 @@ const HamburgerMenu = () => {
                           key={link.href}
                           href={link.href}
                           onClick={() => setIsOpen(false)}
-                          className="rounded-md px-4 py-2 text-base font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-white/10"
+                          className="rounded-md px-4 py-2 text-base font-light text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-white/10"
                           initial={{ opacity: 0, x: -10 }}
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -10 }}
@@ -111,12 +122,19 @@ const HamburgerMenu = () => {
                 </nav>
               </div>
 
-              <div className="flex justify-center border-t border-gray-200 p-4 dark:border-gray-700">
+              <div className="flex justify-center gap-4 border-t border-gray-200 p-4 dark:border-gray-700">
                 <button
                   onClick={() => setIsOpen(false)}
                   className="rounded-md bg-gray-100 px-4 py-2 font-semibold text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
                 >
                   Cerrar menú
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="rounded-md bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
+                >
+                  Logout
                 </button>
               </div>
             </motion.div>

@@ -85,3 +85,14 @@ model FuturePlan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model SiteConfig {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  key String? @unique
+
+  showRegisterPage Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
