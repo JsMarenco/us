@@ -23,17 +23,17 @@ interface Props {
   recipient: User;
 }
 
-export async function getStaticPaths() {
-  const deyopatus = await prisma.deYoPaTu.findMany({
-    include: {
-      creator: true,
-      recipient: true,
-    },
-    orderBy: {
-      writtenAt: "desc",
-    },
-  });
+const deyopatus = await prisma.deYoPaTu.findMany({
+  include: {
+    creator: true,
+    recipient: true,
+  },
+  orderBy: {
+    writtenAt: "desc",
+  },
+});
 
+export async function getStaticPaths() {
   return deyopatus.map((dy, index) => {
     const slug = dy.id;
 
