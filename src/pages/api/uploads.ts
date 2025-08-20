@@ -42,7 +42,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     const ext = path.extname(file.name || "");
     const newFileName = `${uuidv4()}${ext}`;
-    const uploadDir = path.join(process.cwd(), "/tmp/uploads");
+    const uploadDir = "/tmp/uploads";
 
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
