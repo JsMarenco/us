@@ -4,73 +4,40 @@
 // Current project dependencies
 import prisma from "../../lib/prisma";
 import Layout from "../../layouts/Main.astro";
-import type { DeYoPaTu } from "../../schemas/deyopatu";
 import timeAgo from "../../utils/timeAgo";
-import type { User } from "../../schemas/user";
 import BackgroundPortal from "../../components/Common/BackgroundPortal";
 
 export const prerender = false;
 // eslint-disable-next-line astro/no-exports-from-components
 export const ssr = true;
 
-interface Props {
-  deyopatu: DeYoPaTu;
-  prevDeYoPaTuLink: string | null;
-  nextDeYoPaTuLink: string | null;
-  currentIndex: number;
-  total: number;
-  creator: User;
-  recipient: User;
-}
+const { id } = Astro.params;
 
-const deyopatus = await prisma.deYoPaTu.findMany({
-  include: {
-    creator: true,
-    recipient: true,
-  },
-  orderBy: {
-    writtenAt: "desc",
-  },
+const deyopatu = await prisma.deYoPaTu.findUnique({
+  where: { id },
+  include: { creator: true, recipient: true },
 });
 
-export async function getStaticPaths() {
-  return deyopatus.map((dy, index) => {
-    const slug = dy.id;
-
-    const prevDeYoPaTuLink = deyopatus[index - 1]?.id || null;
-    const nextDeYoPaTuLink = deyopatus[index + 1]?.id || null;
-
-    return {
-      params: { id: slug },
-      props: {
-        deyopatu: dy,
-        prevDeYoPaTuLink,
-        nextDeYoPaTuLink,
-        currentIndex: index,
-        total: deyopatus.length,
-        creator: dy.creator,
-        recipient: dy.recipient,
-      },
-    };
-  });
+if (!deyopatu) {
+  return Astro.redirect("/de-yo-pa-tu");
 }
 
-const {
-  deyopatu,
-  creator,
-  prevDeYoPaTuLink,
-  nextDeYoPaTuLink,
-  currentIndex,
-  total,
-} = Astro.props as Props;
+const allDeYoPaTu = await prisma.deYoPaTu.findMany({
+  select: { id: true },
+  orderBy: { writtenAt: "desc" },
+});
 
-if (!deyopatu) return Astro.redirect("/de-yo-pa-tu");
+const currentIndex = allDeYoPaTu.findIndex((dy) => dy.id === id);
+const prevDeYoPaTuLink = allDeYoPaTu[currentIndex - 1]?.id || null;
+const nextDeYoPaTuLink = allDeYoPaTu[currentIndex + 1]?.id || null;
 
 const maxLength = 157;
 const description =
   deyopatu.content.length > maxLength
     ? deyopatu.content.slice(0, maxLength) + "..."
     : deyopatu.content + "...";
+
+const total = allDeYoPaTu.length;
 ---
 
 <Layout
@@ -121,7 +88,7 @@ const description =
           <span>
             Por:{" "}
             <strong class="text-gray-900 dark:text-gray-100">
-              {`${creator.firstName} ${creator.lastName}`}
+              {`${deyopatu.creator.firstName} ${deyopatu.creator.lastName}`}
             </strong>
           </span>
           <span class="ml-2">
