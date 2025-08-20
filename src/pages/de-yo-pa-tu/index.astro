@@ -6,6 +6,8 @@ import Layout from "../../layouts/Main.astro";
 import prisma from "../../lib/prisma";
 import timeAgo from "../../utils/timeAgo";
 
+export const prerender = false;
+
 const deyopatus = await prisma.deYoPaTu.findMany({
   include: {
     creator: true,
