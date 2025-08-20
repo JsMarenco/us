@@ -64,6 +64,8 @@ const {
   total,
 } = Astro.props as Props;
 
+if (!deyopatu) return Astro.redirect("/de-yo-pa-tu");
+
 const maxLength = 157;
 const description =
   deyopatu.content.length > maxLength
