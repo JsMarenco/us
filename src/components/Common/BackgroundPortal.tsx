@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 // Current project dependencies
-import cn from "../../../utils/cn";
+import cn from "../../utils/cn";
 
 interface BackgroundPortalProps {
   src: string;
@@ -42,11 +42,12 @@ export default function BackgroundPortal({
           backgroundPosition: "center",
         }}
       />
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: hover ? 1 : 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed inset-0 -z-10 h-full w-full bg-black/70"
+        className="fixed inset-0 -z-10 h-full w-full bg-white/10 dark:bg-black/70"
       />
     </>,
     container,

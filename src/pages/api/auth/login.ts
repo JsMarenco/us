@@ -8,6 +8,7 @@ import { LoginDtoSchema } from "../../../schemas/auth/login";
 import getFirstZodErrorMessage from "../../../utils/getFirstZodErrorMessage";
 import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
+import { TOKEN_NAME } from "../../../constants";
 
 export const prerender = false;
 
@@ -39,7 +40,6 @@ export const POST: APIRoute = async ({ request }) => {
 
     const { email, password } = parsed.data;
 
-    // Find user by email
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
@@ -51,7 +51,6 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
 
     if (!isPasswordValid) {
@@ -63,15 +62,18 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Generate JWT with user id only
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
+    const tokenHash = await bcrypt.hash(token, 10);
 
-    // Set JWT as HTTP-only cookie
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { tokenHash },
+    });
+
     const headers = new Headers();
-
     const secureFlag = import.meta.env.NODE_ENV ? "" : "Secure";
     const cookie = [
-      `token=${token}`,
+      `${TOKEN_NAME}=${token}`,
       "Path=/",
       `Max-Age=${7 * 24 * 60 * 60}`,
       "SameSite=Strict",

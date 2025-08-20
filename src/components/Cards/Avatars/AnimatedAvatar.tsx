@@ -4,7 +4,7 @@ import { useState } from "react";
 
 // Current project dependencies
 import cn from "../../../utils/cn";
-import BackgroundPortal from "./BackgroundPortal";
+import BackgroundPortal from "../../Common/BackgroundPortal";
 
 interface AnimatedAvatarProps {
   src: string;

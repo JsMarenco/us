@@ -1,37 +1,33 @@
 // Third-party dependencies
 import type { APIRoute } from "astro";
+import bcrypt from "bcryptjs";
 
 // Current project dependencies
 import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
 import validateToken from "../../../utils/validateToken";
+import { TOKEN_NAME } from "../../../constants";
+import authenticateToken from "../../../utils/authenticateToken";
+import { UserPublicSchema } from "../../../schemas/user";
 
 export const prerender = false;
 
-interface JwtUserPayload {
-  id: string;
-}
-
 export const GET: APIRoute = async ({ cookies }) => {
   try {
-    const token = cookies.get("token")?.value;
-    const userPayloadRaw = validateToken(token);
+    const token = cookies.get(TOKEN_NAME)?.value;
+    const auth = await authenticateToken(token);
 
-    if (!userPayloadRaw) {
+    if (!auth) {
+      cookies.delete(TOKEN_NAME, { path: "/" });
       return sendResponse({
-        data: { error: "No autorizado. Token inválido o inexistente." },
-        message: "No autorizado. Inicia sesión primero.",
+        data: { error: "No autorizado." },
+        message: "Inicia sesión primero.",
         success: false,
         status: 401,
       });
     }
 
-    const userPayload = userPayloadRaw as JwtUserPayload;
-
-    const user = await prisma.user.findUnique({
-      where: { id: userPayload.id },
-      omit: { hashedPassword: true },
-    });
+    const { user } = auth;
 
     if (!user) {
       return sendResponse({
@@ -43,7 +39,7 @@ export const GET: APIRoute = async ({ cookies }) => {
     }
 
     return sendResponse({
-      data: user,
+      data: UserPublicSchema.parse(user),
       message: "Usuario autenticado obtenido correctamente.",
       success: true,
       status: 200,

@@ -14,6 +14,7 @@ export const DeYoPaTuSchema = z.object({
   content: z.string().default(""),
   writtenAt: z.coerce.date({ error: "La fecha de redacción es obligatoria." }),
   spotifyEmbedTrackSrc: z.string().default(""),
+  thumbnailSrc: z.string().default(""),
 
   createdAt: z
     .string()
@@ -34,6 +35,8 @@ export const DeYoPaTuDtoSchema = z.object({
     ),
 
   spotifyEmbedTrackSrc: z.string().default(""),
+  thumbnailSrc: z.string().default(""),
+
   title: z.string().optional().default(""),
   content: z.string({
     error: "El contenido es obligatorio.",

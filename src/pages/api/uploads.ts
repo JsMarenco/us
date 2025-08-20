@@ -1,12 +1,15 @@
 // Third-party dependencies
 import type { APIRoute } from "astro";
+import fs from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import sharp from "sharp";
+import { put } from "@vercel/blob";
 
 // Current project dependencies
-import prisma from "../../lib/prisma";
-import sendResponse from "../../utils/sendResponse";
-import { FuturePlanDtoSchema } from "../../schemas/futurePlan";
 import { TOKEN_NAME } from "../../constants";
 import authenticateToken from "../../utils/authenticateToken";
+import sendResponse from "../../utils/sendResponse";
 
 export const prerender = false;
 
@@ -25,36 +28,34 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       });
     }
 
-    const { user: proposer } = auth;
+    const formData = await request.formData();
+    const file = formData.get("file") as File;
 
-    const body = await request.json();
-    const parsed = FuturePlanDtoSchema.safeParse(body);
-
-    if (!parsed.success) {
+    if (!file) {
       return sendResponse({
-        data: { error: parsed.error.flatten().fieldErrors },
-        message: "Datos inválidos.",
+        data: { error: "No se envió ningún archivo." },
+        message: "No se envió ningún archivo.",
         success: false,
         status: 400,
       });
     }
 
-    const { title, description, status, priority, dueDate } = parsed.data;
+    const ext = path.extname(file.name || "");
+    const newFileName = `${uuidv4()}${ext}`;
+    const uploadDir = path.join(process.cwd(), "/tmp/uploads");
 
-    const newFuturePlan = await prisma.futurePlan.create({
-      data: {
-        proposerId: proposer.id,
-        title,
-        description,
-        status,
-        priority,
-        dueDate,
-      },
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const processedBuffer = await sharp(buffer).toBuffer();
+
+    const blob = await put(newFileName, processedBuffer, {
+      access: "public",
     });
 
     return sendResponse({
-      data: newFuturePlan,
-      message: "Plan creado correctamente.",
+      data: { url: blob.url },
+      message: "Archivo subido correctamente.",
       success: true,
       status: 201,
     });

@@ -18,7 +18,9 @@ const getFirstZodErrorMessage = (error?: ZodError): string => {
   const fieldErrors = Object.values(formattedError.fieldErrors).flat();
 
   if (fieldErrors && fieldErrors.length > 0) {
-    return fieldErrors[0] || "Invalid request body.";
+    return typeof fieldErrors[0] === "string"
+      ? fieldErrors[0]
+      : "Invalid request body.";
   }
 
   if (formattedError.formErrors.length > 0) {

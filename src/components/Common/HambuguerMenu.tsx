@@ -71,12 +71,12 @@ const HamburgerMenu = () => {
                     className="h-10 w-10 rounded-full object-cover"
                   />
 
-                  <div className="ml-1 flex flex-col">
+                  <div className="flex flex-col">
                     <span className="font-semibold text-gray-800 dark:text-gray-200">
-                      {user.username}
+                      {user.firstName} {user.lastName}
                     </span>
                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {user.firstName} {user.lastName}
+                      @{user.username}
                     </span>
                   </div>
                 </motion.div>

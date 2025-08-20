@@ -26,6 +26,7 @@ export const FuturePlanSchema = z.object({
       /^[0-9a-fA-F]{24}$/,
       "El ID del proponente debe ser un ObjectId válido.",
     ),
+  thumbnailSrc: z.string().default(""),
 
   createdAt: z
     .string()
@@ -38,6 +39,7 @@ export const FuturePlanSchema = z.object({
 });
 
 export const FuturePlanDtoSchema = z.object({
+  thumbnailSrc: z.string().default(""),
   title: z
     .string()
     .min(3, { message: "El título debe tener al menos 3 caracteres" }),

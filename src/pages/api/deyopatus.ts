@@ -6,39 +6,27 @@ import prisma from "../../lib/prisma";
 import sendResponse from "../../utils/sendResponse";
 import validateToken from "../../utils/validateToken";
 import { DeYoPaTuDtoSchema } from "../../schemas/deyopatu";
+import { TOKEN_NAME } from "../../constants";
+import authenticateToken from "../../utils/authenticateToken";
 
 export const prerender = false;
 
-interface JwtUserPayload {
-  id: string;
-}
-
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    const token = cookies.get("token")?.value;
-    const userPayloadRaw = validateToken(token);
+    const token = cookies.get(TOKEN_NAME)?.value;
+    const auth = await authenticateToken(token);
 
-    if (!userPayloadRaw) {
+    if (!auth) {
+      cookies.delete(TOKEN_NAME, { path: "/" });
       return sendResponse({
-        data: { error: "No autorizado. Token inválido o inexistente." },
-        message: "No autorizado. Inicia sesión primero.",
+        data: { error: "No autorizado." },
+        message: "Inicia sesión primero.",
         success: false,
         status: 401,
       });
     }
 
-    const { id: creatorId } = userPayloadRaw as JwtUserPayload;
-
-    const creator = await prisma.user.findUnique({ where: { id: creatorId } });
-
-    if (!creator) {
-      return sendResponse({
-        data: { error: "Usuario creador no encontrado." },
-        message: "Usuario creador no encontrado.",
-        success: false,
-        status: 404,
-      });
-    }
+    const { user: creator } = auth;
 
     const body = await request.json();
     const parsed = DeYoPaTuDtoSchema.safeParse(body);
@@ -52,8 +40,14 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       });
     }
 
-    const { recipientId, title, content, writtenAt, spotifyEmbedTrackSrc } =
-      parsed.data;
+    const {
+      recipientId,
+      title,
+      content,
+      writtenAt,
+      spotifyEmbedTrackSrc,
+      thumbnailSrc,
+    } = parsed.data;
 
     const recipient = await prisma.user.findUnique({
       where: { id: recipientId },
@@ -68,7 +62,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       });
     }
 
-    if (recipientId === creatorId) {
+    if (recipientId === creator.id) {
       return sendResponse({
         data: { error: "No puedes enviarte un DeYoPaTu a ti mismo." },
         message: "No puedes ser tu propio destinatario.",
@@ -79,12 +73,13 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     const newDeYoPaTu = await prisma.deYoPaTu.create({
       data: {
-        creatorId,
+        creatorId: creator.id,
         recipientId,
         title,
         content,
         writtenAt,
         spotifyEmbedTrackSrc,
+        thumbnailSrc,
       },
     });
 

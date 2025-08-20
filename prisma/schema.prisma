@@ -30,6 +30,8 @@ model User {
   lastName       String?
   avatarSrc      String? @default("https://i.pravatar.cc/300")
 
+  tokenHash String? @default("")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -62,6 +64,7 @@ model DeYoPaTu {
   spotifyEmbedTrackSrc String?  @default("")
   content              String
   writtenAt            DateTime
+  thumbnailSrc         String?  @default("")
 
   creator   User @relation("CreatedDeYoPaTus", fields: [creatorId], references: [id])
   recipient User @relation("ReceivedDeYoPatus", fields: [recipientId], references: [id])
@@ -78,6 +81,7 @@ model FuturePlan {
   status      PlanStatus   @default(PENDING)
   priority    PlanPriority @default(HIGH)
   dueDate     DateTime?
+  thumbnailSrc         String?  @default("")
 
   proposerId String @db.ObjectId
   proposer   User   @relation("ProposedPlans", fields: [proposerId], references: [id])

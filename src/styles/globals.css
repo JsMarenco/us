@@ -39,3 +39,15 @@
 html {
   scroll-behavior: smooth;
 }
+
+option {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #1f2937;
+}
+
+@media (prefers-color-scheme: dark) {
+  option {
+    background-color: rgba(31, 41, 55, 0.8);
+    color: #f3f4f6;
+  }
+}

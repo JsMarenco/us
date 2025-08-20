@@ -7,32 +7,27 @@ import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
 import validateToken from "../../../utils/validateToken";
 import { UserEditDtoSchema } from "../../../schemas/user";
+import { TOKEN_NAME } from "../../../constants";
+import authenticateToken from "../../../utils/authenticateToken";
 
 export const prerender = false;
 
-interface JwtUserPayload {
-  id: string;
-}
-
 export const PUT: APIRoute = async ({ cookies, request }) => {
   try {
-    const token = cookies.get("token")?.value;
-    const userPayloadRaw = validateToken(token);
+    const token = cookies.get(TOKEN_NAME)?.value;
+    const auth = await authenticateToken(token);
 
-    if (!userPayloadRaw) {
+    if (!auth) {
+      cookies.delete(TOKEN_NAME, { path: "/" });
       return sendResponse({
-        data: { error: "No autorizado. Token inválido o inexistente." },
-        message: "No autorizado. Inicia sesión primero.",
+        data: { error: "No autorizado." },
+        message: "Inicia sesión primero.",
         success: false,
         status: 401,
       });
     }
 
-    const userPayload = userPayloadRaw as JwtUserPayload;
-
-    const existingUser = await prisma.user.findUnique({
-      where: { id: userPayload.id },
-    });
+    const { user: existingUser } = auth;
 
     if (!existingUser) {
       return sendResponse({
@@ -81,7 +76,7 @@ export const PUT: APIRoute = async ({ cookies, request }) => {
     const { confirmNewPassword: _, ...userData } = updateData;
 
     const updatedUser = await prisma.user.update({
-      where: { id: userPayload.id },
+      where: { id: existingUser.id },
       data: {
         ...userData,
         hashedPassword,
