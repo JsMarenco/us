@@ -36,22 +36,22 @@ export const POST: APIRoute = async ({ request }) => {
 
     const { email, password } = parsed.data;
 
-    // Enforce Gmail domain
-    if (!email.toLowerCase().endsWith("@gmail.com")) {
+    const allowedDomains = ["@gmail.com", "@hotmail.com"];
+    const emailLower = email.toLowerCase();
+
+    if (!allowedDomains.some((domain) => emailLower.endsWith(domain))) {
       return sendResponse({
-        data: { error: "Solo se permiten correos @gmail.com." },
-        message: "Solo se permiten correos @gmail.com.",
+        data: { error: "Solo se permiten correos @gmail.com o @hotmail.com." },
+        message: "Solo se permiten correos @gmail.com o @hotmail.com.",
         success: false,
         status: 400,
       });
     }
 
-    // Generate random username (max 16 characters)
-    const randomUsername = `user_${Math.random()
+    const randomUsername = `churri_${Math.random()
       .toString(36)
       .substring(2, 16)}`;
 
-    // Check if email already exists
     const existingEmail = await prisma.user.findUnique({ where: { email } });
 
     if (existingEmail) {
@@ -76,10 +76,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Save to database
     const newUser = await prisma.user.create({
       data: {
         username: randomUsername,

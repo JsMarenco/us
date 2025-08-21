@@ -35,6 +35,9 @@ model User {
 
   resetTokenHash      String?   @default("")
   resetTokenCreatedAt DateTime?
+  resetTokenExpiresAt DateTime?
+  resetRequestCount   Int       @default(0)
+  resetRequestDate    DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

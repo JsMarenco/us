@@ -1,0 +1,22 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import ResetPasswordForm from "../../../components/Forms/ResetPassword";
+import Auth from "../../../layouts/Auth.astro";
+
+export const prerender = false;
+// eslint-disable-next-line astro/no-exports-from-components
+export const ssr = true;
+
+const { token } = Astro.params;
+---
+
+<Auth
+  bgImage="/assets/backgrounds/reset-password.png"
+  description="Ingresa tu nueva contraseña para restablecer tu cuenta."
+  image="/assets/backgrounds/reset-password.png"
+  title="Restablecer contraseña"
+>
+  <ResetPasswordForm client:load token={token || ""} />
+</Auth>
