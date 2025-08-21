@@ -30,8 +30,11 @@ model User {
   lastName       String?
   avatarSrc      String? @default("https://i.pravatar.cc/300")
 
-  tokenHash      String?   @default("")
-  tokenCreatedAt DateTime?
+  sessionTokenHash      String?   @default("")
+  sessionTokenCreatedAt DateTime?
+
+  resetTokenHash      String?   @default("")
+  resetTokenCreatedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

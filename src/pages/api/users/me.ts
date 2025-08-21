@@ -18,7 +18,7 @@ export const GET: APIRoute = async ({ cookies }) => {
     const auth = await authenticateToken(token);
 
     if (!auth) {
-      cookies.delete(TOKEN_NAME, { path: "/" });
+      cookies.delete(TOKEN_NAME, { path: "/auth/login" });
       return sendResponse({
         data: { error: "No autorizado." },
         message: "Inicia sesión primero.",

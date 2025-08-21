@@ -19,9 +19,9 @@ const authenticateToken = async (
     where: { id: payload.id },
   });
 
-  if (!user || !user.tokenHash) return null;
+  if (!user || !user.sessionTokenHash) return null;
 
-  const isValid = await bcrypt.compare(token, user.tokenHash);
+  const isValid = await bcrypt.compare(token, user.sessionTokenHash);
 
   if (!isValid) return null;
 

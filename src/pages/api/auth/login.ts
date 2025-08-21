@@ -63,11 +63,11 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
-    const tokenHash = await bcrypt.hash(token, 10);
+    const sessionTokenHash = await bcrypt.hash(token, 10);
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { tokenHash, tokenCreatedAt: new Date() },
+      data: { sessionTokenHash, sessionTokenCreatedAt: new Date() },
     });
 
     const headers = new Headers();
