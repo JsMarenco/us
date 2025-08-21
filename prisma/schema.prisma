@@ -30,7 +30,8 @@ model User {
   lastName       String?
   avatarSrc      String? @default("https://i.pravatar.cc/300")
 
-  tokenHash String? @default("")
+  tokenHash      String?   @default("")
+  tokenCreatedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -76,12 +77,12 @@ model DeYoPaTu {
 model FuturePlan {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  title       String
-  description String?
-  status      PlanStatus   @default(PENDING)
-  priority    PlanPriority @default(HIGH)
-  dueDate     DateTime?
-  thumbnailSrc         String?  @default("")
+  title        String
+  description  String?
+  status       PlanStatus   @default(PENDING)
+  priority     PlanPriority @default(HIGH)
+  dueDate      DateTime?
+  thumbnailSrc String?      @default("")
 
   proposerId String @db.ObjectId
   proposer   User   @relation("ProposedPlans", fields: [proposerId], references: [id])

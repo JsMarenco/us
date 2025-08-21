@@ -67,7 +67,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     await prisma.user.update({
       where: { id: user.id },
-      data: { tokenHash },
+      data: { tokenHash, tokenCreatedAt: new Date() },
     });
 
     const headers = new Headers();
