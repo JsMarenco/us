@@ -49,58 +49,74 @@ const total = allDeYoPaTu.length;
   title={deyopatu.title || "De Yo Pa Tu"}
 >
   <div class="flex flex-col items-center gap-2">
+    <BackgroundPortal
+      client:load
+      hover={deyopatu.thumbnailSrc ? true : false}
+      src={deyopatu.thumbnailSrc || ""}
+    />
+
     <div class="w-full max-w-3xl flex-1 space-y-3 overflow-auto text-center">
       <div class="w-full flex-1 space-y-3 overflow-auto rounded-lg text-center">
-        <BackgroundPortal
-          client:load
-          hover={deyopatu.thumbnailSrc ? true : false}
-          src={deyopatu.thumbnailSrc || ""}
-        />
-
-        {
-          deyopatu.thumbnailSrc && (
-            <div class="mx-auto w-full max-w-xl">
-              <img
-                alt={deyopatu.title}
-                class="mb-6 h-auto w-full rounded-lg object-cover"
-                loading="lazy"
-                src={deyopatu.thumbnailSrc}
-                transition:animate="slide"
-              />
-            </div>
-          )
-        }
-
-        {
-          deyopatu.title && (
-            <h1 class="text-4xl font-bold text-teal-700 dark:text-teal-400">
-              {deyopatu.title}
-            </h1>
-          )
-        }
-
-        <p
-          class="text-center whitespace-pre-wrap text-gray-700 dark:text-gray-300"
-        >
-          {deyopatu.content}
-        </p>
-
         <div
-          class="mt-3 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400"
+          class="mx-auto w-full max-w-3xl rounded-xl border border-white/40 bg-white/70 p-6 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-800/40"
         >
-          <span>
-            Por:{" "}
-            <strong class="text-gray-900 dark:text-gray-100">
-              {`${deyopatu.creator.firstName} ${deyopatu.creator.lastName}`}
-            </strong>
-          </span>
-          <span class="ml-2">
-            {
-              deyopatu.writtenAt
-                ? `${timeAgo(deyopatu.writtenAt)}`
-                : "Fecha desconocida"
-            }
-          </span>
+          {
+            deyopatu.thumbnailSrc && (
+              <div class="mx-auto w-full max-w-xl">
+                <img
+                  alt={deyopatu.title}
+                  class="mb-6 h-auto w-full rounded-lg object-cover"
+                  loading="lazy"
+                  src={deyopatu.thumbnailSrc}
+                  transition:animate="slide"
+                />
+              </div>
+            )
+          }
+
+          {
+            deyopatu.title && (
+              <h1 class="text-4xl font-bold text-teal-700 dark:text-teal-400">
+                {deyopatu.title}
+              </h1>
+            )
+          }
+
+          <p
+            class="text-center whitespace-pre-wrap text-gray-700 dark:text-gray-300"
+          >
+            {deyopatu.content}
+          </p>
+
+          <div
+            class="mt-3 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400"
+          >
+            <span>
+              Por:{" "}
+              <strong class="text-gray-900 dark:text-gray-100">
+                {
+                  `${deyopatu.creator.firstName || ""} ${deyopatu.creator.lastName || ""}`
+                }
+              </strong>
+            </span>
+
+            <span>
+              Para:{" "}
+              <strong class="text-gray-900 dark:text-gray-100">
+                {
+                  `${deyopatu.recipient.firstName || ""} ${deyopatu.recipient.lastName || ""}`
+                }
+              </strong>
+            </span>
+
+            <span class="ml-2 capitalize">
+              {
+                deyopatu.writtenAt
+                  ? `${timeAgo(deyopatu.writtenAt)}`
+                  : "fecha desconocida"
+              }
+            </span>
+          </div>
         </div>
       </div>
 
@@ -131,43 +147,47 @@ const total = allDeYoPaTu.length;
         </div>
 
         <div
-          class="flex flex-col gap-4 text-lg font-semibold md:flex-row md:items-center md:justify-between"
+          class="mx-auto w-full max-w-3xl rounded-xl border border-white/40 bg-white/70 p-6 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-800/40"
         >
-          {
-            prevDeYoPaTuLink ? (
-              <a
-                class="w-full rounded-xl border border-gray-200/50 bg-gray-100/70 px-6 py-3 text-center font-semibold text-teal-700 shadow-md backdrop-blur-sm transition-colors hover:bg-teal-600 hover:text-white hover:shadow-lg sm:w-auto dark:border-gray-700/50 dark:bg-gray-800/70 dark:text-gray-100 dark:hover:bg-teal-600"
-                href={prevDeYoPaTuLink}
-              >
-                Anterior
-              </a>
-            ) : (
-              <span class="w-full rounded-xl border border-gray-200/50 bg-gray-300/50 px-6 py-3 text-center font-semibold text-gray-500 opacity-60 backdrop-blur-sm sm:w-auto dark:border-gray-700/50 dark:bg-gray-700/50 dark:text-gray-400">
-                Anterior
-              </span>
-            )
-          }
+          <div
+            class="flex flex-col gap-4 text-lg font-semibold md:flex-row md:items-center md:justify-between"
+          >
+            {
+              prevDeYoPaTuLink ? (
+                <a
+                  class="w-full rounded-xl border border-gray-200/50 bg-gray-100/70 px-6 py-3 text-center font-semibold text-teal-700 shadow-md backdrop-blur-sm transition-colors hover:bg-teal-600 hover:text-white hover:shadow-lg sm:w-auto dark:border-gray-700/50 dark:bg-gray-800/70 dark:text-gray-100 dark:hover:bg-teal-600"
+                  href={prevDeYoPaTuLink}
+                >
+                  Anterior
+                </a>
+              ) : (
+                <span class="w-full rounded-xl border border-gray-200/50 bg-gray-300/50 px-6 py-3 text-center font-semibold text-gray-500 opacity-60 backdrop-blur-sm sm:w-auto dark:border-gray-700/50 dark:bg-gray-700/50 dark:text-gray-400">
+                  Anterior
+                </span>
+              )
+            }
 
-          <div class="hidden flex-1 justify-center md:flex">
-            <span class="text-gray-600 dark:text-gray-300">
-              {currentIndex + 1} / {total}
-            </span>
+            <div class="hidden flex-1 justify-center md:flex">
+              <span class="text-gray-600 dark:text-gray-300">
+                {currentIndex + 1} / {total}
+              </span>
+            </div>
+
+            {
+              nextDeYoPaTuLink ? (
+                <a
+                  class="w-full rounded-xl border border-gray-200/50 bg-gray-100/70 px-6 py-3 text-center font-semibold text-teal-700 shadow-md backdrop-blur-sm transition-colors hover:bg-teal-600 hover:text-white hover:shadow-lg sm:w-auto dark:border-gray-700/50 dark:bg-gray-800/70 dark:text-gray-100 dark:hover:bg-teal-600"
+                  href={nextDeYoPaTuLink}
+                >
+                  Siguiente
+                </a>
+              ) : (
+                <span class="w-full rounded-xl border border-gray-200/50 bg-gray-300/50 px-6 py-3 text-center font-semibold text-gray-500 opacity-60 backdrop-blur-sm sm:w-auto dark:border-gray-700/50 dark:bg-gray-700/50 dark:text-gray-400">
+                  Siguiente
+                </span>
+              )
+            }
           </div>
-
-          {
-            nextDeYoPaTuLink ? (
-              <a
-                class="w-full rounded-xl border border-gray-200/50 bg-gray-100/70 px-6 py-3 text-center font-semibold text-teal-700 shadow-md backdrop-blur-sm transition-colors hover:bg-teal-600 hover:text-white hover:shadow-lg sm:w-auto dark:border-gray-700/50 dark:bg-gray-800/70 dark:text-gray-100 dark:hover:bg-teal-600"
-                href={nextDeYoPaTuLink}
-              >
-                Siguiente
-              </a>
-            ) : (
-              <span class="w-full rounded-xl border border-gray-200/50 bg-gray-300/50 px-6 py-3 text-center font-semibold text-gray-500 opacity-60 backdrop-blur-sm sm:w-auto dark:border-gray-700/50 dark:bg-gray-700/50 dark:text-gray-400">
-                Siguiente
-              </span>
-            )
-          }
         </div>
       </div>
     </div>
