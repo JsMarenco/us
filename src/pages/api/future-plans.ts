@@ -6,7 +6,7 @@ import prisma from "../../lib/prisma";
 import sendResponse from "../../utils/sendResponse";
 import { FuturePlanDtoSchema } from "../../schemas/futurePlan";
 import { TOKEN_NAME } from "../../constants";
-import authenticateToken from "../../utils/authenticateToken";
+import authenticateToken from "../../utils/sessions/authenticateToken";
 
 export const prerender = false;
 

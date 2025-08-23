@@ -8,7 +8,7 @@ import { put } from "@vercel/blob";
 
 // Current project dependencies
 import { TOKEN_NAME } from "../../constants";
-import authenticateToken from "../../utils/authenticateToken";
+import authenticateToken from "../../utils/sessions/authenticateToken";
 import sendResponse from "../../utils/sendResponse";
 
 export const prerender = false;

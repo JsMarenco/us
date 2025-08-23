@@ -8,6 +8,7 @@ import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
 import { ResetPasswordDtoSchema } from "../../../schemas/auth/password";
 import getFirstZodErrorMessage from "../../../utils/getFirstZodErrorMessage";
+import { sendPasswordResetSuccessEmail } from "../../../utils/emails";
 
 export const prerender = false;
 
@@ -96,6 +97,18 @@ export const POST: APIRoute = async ({ request }) => {
         resetRequestCount: 0,
         resetRequestDate: null,
       },
+    });
+
+    const url = new URL(request.url);
+    const host = url.origin;
+    const loginLink = `${host}/auth/login`;
+    const { firstName: first, lastName: last, username: fallback } = user;
+    const fullname = [first, last].filter(Boolean).join(" ") || fallback;
+
+    await sendPasswordResetSuccessEmail({
+      to: user.email,
+      fullname,
+      loginLink,
     });
 
     return sendResponse({

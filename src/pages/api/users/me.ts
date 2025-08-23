@@ -7,7 +7,7 @@ import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
 import validateToken from "../../../utils/validateToken";
 import { TOKEN_NAME } from "../../../constants";
-import authenticateToken from "../../../utils/authenticateToken";
+import authenticateToken from "../../../utils/sessions/authenticateToken";
 import { UserPublicSchema } from "../../../schemas/user";
 
 export const prerender = false;

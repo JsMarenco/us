@@ -30,9 +30,6 @@ model User {
   lastName       String?
   avatarSrc      String? @default("https://i.pravatar.cc/300")
 
-  sessionTokenHash      String?   @default("")
-  sessionTokenCreatedAt DateTime?
-
   resetTokenHash      String?   @default("")
   resetTokenCreatedAt DateTime?
   resetTokenExpiresAt DateTime?
@@ -46,6 +43,28 @@ model User {
   createdDeYoPaTus  DeYoPaTu[] @relation("CreatedDeYoPaTus")
 
   FuturePlan FuturePlan[] @relation("ProposedPlans")
+  Session    Session[]
+}
+
+model Session {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  tokenHash  String
+  expiresAt  DateTime
+  lastUsedAt DateTime?
+
+  deviceName String?
+  deviceInfo String?
+  ipAddress  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tokenHash])
+  @@index([userId])
 }
 
 model AvatarPair {

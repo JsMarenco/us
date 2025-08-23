@@ -2,6 +2,7 @@
 import type { APIRoute } from "astro";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { UAParser } from "ua-parser-js";
 
 // Current project dependencies
 import { LoginDtoSchema } from "../../../schemas/auth/login";
@@ -9,6 +10,7 @@ import getFirstZodErrorMessage from "../../../utils/getFirstZodErrorMessage";
 import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
 import { TOKEN_NAME } from "../../../constants";
+import getClientInfo from "../../../utils/getClientInfo";
 
 export const prerender = false;
 
@@ -64,10 +66,19 @@ export const POST: APIRoute = async ({ request }) => {
 
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
     const sessionTokenHash = await bcrypt.hash(token, 10);
+    const { deviceInfo, deviceName, ipAddress } = getClientInfo(
+      request.headers,
+    );
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { sessionTokenHash, sessionTokenCreatedAt: new Date() },
+    await prisma.session.create({
+      data: {
+        userId: user.id,
+        tokenHash: sessionTokenHash,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        ipAddress,
+        deviceName,
+        deviceInfo,
+      },
     });
 
     const headers = new Headers();

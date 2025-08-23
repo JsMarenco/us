@@ -8,7 +8,7 @@ import sendResponse from "../../../utils/sendResponse";
 import validateToken from "../../../utils/validateToken";
 import { UserEditDtoSchema } from "../../../schemas/user";
 import { TOKEN_NAME } from "../../../constants";
-import authenticateToken from "../../../utils/authenticateToken";
+import authenticateToken from "../../../utils/sessions/authenticateToken";
 
 export const prerender = false;
 

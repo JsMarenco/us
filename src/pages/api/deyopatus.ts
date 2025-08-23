@@ -7,7 +7,7 @@ import sendResponse from "../../utils/sendResponse";
 import validateToken from "../../utils/validateToken";
 import { DeYoPaTuDtoSchema } from "../../schemas/deyopatu";
 import { TOKEN_NAME } from "../../constants";
-import authenticateToken from "../../utils/authenticateToken";
+import authenticateToken from "../../utils/sessions/authenticateToken";
 
 export const prerender = false;
 
