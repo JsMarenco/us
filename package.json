@@ -30,6 +30,7 @@
     "bcryptjs": "3.0.2",
     "clsx": "2.1.1",
     "framer-motion": "12.23.12",
+    "handlebars": "4.7.8",
     "jsonwebtoken": "9.0.2",
     "nodemailer": "7.0.5",
     "react": "19.1.0",

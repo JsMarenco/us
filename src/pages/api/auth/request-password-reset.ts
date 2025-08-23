@@ -2,13 +2,14 @@
 import type { APIRoute } from "astro";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-// import nodemailer from "nodemailer";
+import nodemailer from "nodemailer";
 
 // Current project dependencies
 import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
 import { RequestPasswordResetDtoSchema } from "../../../schemas/auth/password";
 import getFirstZodErrorMessage from "../../../utils/getFirstZodErrorMessage";
+import { sendPasswordResetEmail } from "../../../utils/emails";
 
 export const prerender = false;
 
@@ -108,23 +109,14 @@ export const POST: APIRoute = async ({ request }) => {
     const isDev = import.meta.env.NODE_ENV === "development";
     const dataToReturn = isDev ? { resetLink } : null;
 
-    // const senderUser = import.meta.env.SENDER_GMAIL_USER || "";
-    // const senderPass = import.meta.env.SENDER_GMAIL_PASS || "";
+    const { firstName: first, lastName: last, username: fallback } = user;
+    const fullname = [first, last].filter(Boolean).join(" ") || fallback;
 
-    // const transporter = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: senderUser,
-    //     pass: senderPass,
-    //   },
-    // });
-
-    // await transporter.sendMail({
-    //   from: `Cocotón <${senderUser}>`,
-    //   to: user.email,
-    //   subject: "Recuperar contraseña",
-    //   html: `<p>Haz clic <a href="${resetLink}">aquí</a> para restablecer tu contraseña</p>`,
-    // });
+    await sendPasswordResetEmail({
+      to: user.email,
+      resetLink,
+      fullname,
+    });
 
     return sendResponse({
       data: dataToReturn,
