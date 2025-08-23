@@ -2,7 +2,6 @@
 import type { APIRoute } from "astro";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { UAParser } from "ua-parser-js";
 
 // Current project dependencies
 import { LoginDtoSchema } from "../../../schemas/auth/login";
