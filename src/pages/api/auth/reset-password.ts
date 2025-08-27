@@ -9,6 +9,7 @@ import sendResponse from "../../../utils/sendResponse";
 import { ResetPasswordDtoSchema } from "../../../schemas/auth/password";
 import getFirstZodErrorMessage from "../../../utils/getFirstZodErrorMessage";
 import { sendPasswordResetSuccessEmail } from "../../../utils/emails";
+import httpStatus from "../../../constants/httpStatus";
 
 export const prerender = false;
 
@@ -23,7 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Datos no proporcionados." },
         message: "Datos no proporcionados.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -34,7 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: getFirstZodErrorMessage(parsed.error) },
         message: getFirstZodErrorMessage(parsed.error),
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -50,7 +51,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Token inválido o expirado." },
         message: "Token inválido o expirado.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -61,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Token inválido o expirado." },
         message: "Token inválido o expirado.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -70,7 +71,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Token expirado." },
         message: "Token expirado.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -81,7 +82,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Token inválido." },
         message: "Token inválido.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -96,6 +97,7 @@ export const POST: APIRoute = async ({ request }) => {
         resetTokenExpiresAt: null,
         resetRequestCount: 0,
         resetRequestDate: null,
+        lastPasswordResetAt: new Date(),
       },
     });
 
@@ -115,7 +117,7 @@ export const POST: APIRoute = async ({ request }) => {
       data: { message: "Contraseña actualizada correctamente." },
       message: "Contraseña actualizada correctamente.",
       success: true,
-      status: 200,
+      status: httpStatus.ok.code,
     });
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -124,7 +126,7 @@ export const POST: APIRoute = async ({ request }) => {
       data: { error: "Error interno del servidor." },
       message: "Error interno del servidor.",
       success: false,
-      status: 500,
+      status: httpStatus.serverError.code,
     });
   }
 };

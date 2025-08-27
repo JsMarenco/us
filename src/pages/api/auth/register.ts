@@ -7,6 +7,7 @@ import { RegisterDtoSchema } from "../../../schemas/auth/register";
 import getFirstZodErrorMessage from "../../../utils/getFirstZodErrorMessage";
 import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
+import httpStatus from "../../../constants/httpStatus";
 
 export const prerender = false;
 
@@ -19,7 +20,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Datos de registro no proporcionados." },
         message: "Datos de registro no proporcionados.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -30,11 +31,11 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: getFirstZodErrorMessage(parsed.error) },
         message: getFirstZodErrorMessage(parsed.error),
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
-    const { email, password } = parsed.data;
+    const { email, password, firstName, lastName } = parsed.data;
 
     const allowedDomains = ["@gmail.com", "@hotmail.com"];
     const emailLower = email.toLowerCase();
@@ -44,7 +45,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Solo se permiten correos @gmail.com o @hotmail.com." },
         message: "Solo se permiten correos @gmail.com o @hotmail.com.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -59,7 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Ya existe un usuario con ese correo electrónico." },
         message: "Ya existe un usuario con ese correo electrónico.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -72,16 +73,19 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Ya existe un usuario con ese nombre de usuario." },
         message: "Ya existe un usuario con ese nombre de usuario.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await prisma.user.create({
       data: {
         username: randomUsername,
         email,
         hashedPassword,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
       },
     });
 
@@ -89,11 +93,11 @@ export const POST: APIRoute = async ({ request }) => {
       data: {
         id: newUser.id,
         username: newUser.username,
-        email: newUser.email,
+        email: newUser.email.toLowerCase().trim(),
       },
       message: "Usuario registrado exitosamente",
       success: true,
-      status: 201,
+      status: httpStatus.created.code,
     });
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -102,7 +106,7 @@ export const POST: APIRoute = async ({ request }) => {
       data: { error: "Error interno del servidor." },
       message: "Error interno del servidor.",
       success: false,
-      status: 500,
+      status: httpStatus.serverError.code,
     });
   }
 };

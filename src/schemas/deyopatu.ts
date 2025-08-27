@@ -6,15 +6,25 @@ import { z } from "zod";
 export const DeYoPaTuSchema = z.object({
   id: z.string().min(3, { message: "El ID es requerido" }),
 
-  recipientId: z.string({ error: "El ID del destinatario es obligatorio." }),
-
   title: z
     .string()
     .min(3, { message: "El nombre debe tener al menos 3 caracteres" }),
   content: z.string().default(""),
   writtenAt: z.coerce.date({ error: "La fecha de redacción es obligatoria." }),
-  spotifyEmbedTrackSrc: z.string().default(""),
   thumbnailSrc: z.string().default(""),
+  spotifyEmbedTrackSrc: z
+    .string()
+    .default("")
+    .refine(
+      (val) =>
+        val === "" ||
+        /^https?:\/\/open\.spotify\.com\/(track|playlist|album)\/[a-zA-Z0-9]+/.test(
+          val,
+        ),
+      {
+        message: "Debe ser una URL de Spotify válida o vacío",
+      },
+    ),
 
   createdAt: z
     .string()
@@ -27,20 +37,29 @@ export const DeYoPaTuSchema = z.object({
 });
 
 export const DeYoPaTuDtoSchema = z.object({
-  recipientId: z
-    .string({ error: "El ID del destinatario es obligatorio." })
-    .regex(
-      /^[0-9a-fA-F]{24}$/,
-      "El ID del destinatario debe ser un ObjectId válido.",
-    ),
+  id: z.string().optional().default(""),
 
-  spotifyEmbedTrackSrc: z.string().default(""),
+  spotifyEmbedTrackSrc: z
+    .string()
+    .default("")
+    .refine(
+      (val) =>
+        val === "" ||
+        /^https?:\/\/open\.spotify\.com\/(track|playlist|album)\/[a-zA-Z0-9]+/.test(
+          val,
+        ),
+      {
+        message: "Debe ser una URL de Spotify válida o vacío",
+      },
+    ),
   thumbnailSrc: z.string().default(""),
 
   title: z.string().optional().default(""),
-  content: z.string({
-    error: "El contenido es obligatorio.",
-  }),
+  content: z
+    .string({
+      error: "El contenido es obligatorio.",
+    })
+    .min(3, { message: "El contenido debe tener al menos 3 caracteres" }),
 
   writtenAt: z.coerce.date({
     error: "La fecha de redacción es obligatoria.",

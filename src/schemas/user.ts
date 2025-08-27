@@ -16,7 +16,7 @@ const UserSchema = z.object({
   hashedPassword: z
     .string()
     .min(6, { message: "La contraseña debe tener al menos 6 caracteres" }),
-  avatarSrc: z.string().optional().default("https://i.pravatar.cc/300"),
+  avatarSrc: z.string().optional().default(""),
 
   createdAt: z
     .string()
@@ -45,7 +45,7 @@ export const UserEditDtoSchema = z
     currentPassword: z.string().min(6, {
       message: "La contraseña actual debe tener al menos 6 caracteres",
     }),
-    avatarSrc: z.string().optional().default("https://i.pravatar.cc/300"),
+    avatarSrc: z.string().optional().default(""),
     newPassword: z.string().optional(),
     confirmNewPassword: z.string().optional(),
   })

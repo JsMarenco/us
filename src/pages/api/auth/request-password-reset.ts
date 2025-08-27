@@ -2,7 +2,6 @@
 import type { APIRoute } from "astro";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import nodemailer from "nodemailer";
 
 // Current project dependencies
 import prisma from "../../../lib/prisma";
@@ -10,6 +9,7 @@ import sendResponse from "../../../utils/sendResponse";
 import { RequestPasswordResetDtoSchema } from "../../../schemas/auth/password";
 import getFirstZodErrorMessage from "../../../utils/getFirstZodErrorMessage";
 import { sendPasswordResetEmail } from "../../../utils/emails";
+import httpStatus from "../../../constants/httpStatus";
 
 export const prerender = false;
 
@@ -24,7 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Credenciales no proporcionadas." },
         message: "Credenciales no proporcionadas.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -35,7 +35,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: getFirstZodErrorMessage(parsed.error) },
         message: getFirstZodErrorMessage(parsed.error),
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -50,8 +50,25 @@ export const POST: APIRoute = async ({ request }) => {
         },
         message: "Si el correo existe, se enviará un enlace de recuperación.",
         success: true,
-        status: 200,
+        status: httpStatus.ok.code,
       });
+    }
+
+    if (user.lastPasswordResetAt) {
+      const threeHoursAgo = new Date(Date.now() - 3 * 60 * 60 * 1000);
+
+      if (user.lastPasswordResetAt > threeHoursAgo) {
+        return sendResponse({
+          data: {
+            error:
+              "Ya se ha restablecido la contraseña en las últimas 3 horas.",
+          },
+          message:
+            "Ya se ha restablecido la contraseña en las últimas 3 horas.",
+          success: false,
+          status: httpStatus.tooManyRequests.code,
+        });
+      }
     }
 
     const today = new Date();
@@ -64,7 +81,7 @@ export const POST: APIRoute = async ({ request }) => {
           data: { error: "Límite de solicitudes alcanzado. Intenta mañana." },
           message: "Límite de solicitudes alcanzado. Intenta mañana.",
           success: false,
-          status: 429,
+          status: httpStatus.tooManyRequests.code,
         });
       }
 
@@ -112,17 +129,19 @@ export const POST: APIRoute = async ({ request }) => {
     const { firstName: first, lastName: last, username: fallback } = user;
     const fullname = [first, last].filter(Boolean).join(" ") || fallback;
 
-    await sendPasswordResetEmail({
-      to: user.email,
-      resetLink,
-      fullname,
-    });
+    if (!isDev) {
+      await sendPasswordResetEmail({
+        to: user.email,
+        resetLink,
+        fullname,
+      });
+    }
 
     return sendResponse({
       data: dataToReturn,
       message: "Si el correo existe, se enviará un enlace de recuperación.",
       success: true,
-      status: 200,
+      status: httpStatus.ok.code,
     });
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -131,7 +150,7 @@ export const POST: APIRoute = async ({ request }) => {
       data: { error: "Error interno del servidor." },
       message: "Error interno del servidor.",
       success: false,
-      status: 500,
+      status: httpStatus.serverError.code,
     });
   }
 };

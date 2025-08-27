@@ -1,0 +1,71 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import prisma from "../../../lib/prisma";
+import Layout from "../../../layouts/Main.astro";
+import { TOKEN_NAME } from "../../../constants";
+import authenticateToken from "../../../utils/sessions/authenticateToken";
+import DeYoPaTuView from "../../../components/Views/DeYoPaTu/index.astro";
+
+export const prerender = false;
+// eslint-disable-next-line astro/no-exports-from-components
+export const ssr = true;
+
+const { id } = Astro.params;
+
+const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(id || "");
+
+if (!isValidObjectId) {
+  return Astro.redirect("/de-yo-pa-tu");
+}
+
+const deyopatu = await prisma.deYoPaTu.findUnique({
+  where: { id },
+  include: { creator: true },
+});
+
+if (!deyopatu) {
+  return Astro.redirect("/de-yo-pa-tu");
+}
+
+const allDeYoPaTu = await prisma.deYoPaTu.findMany({
+  select: { id: true },
+  orderBy: { writtenAt: "desc" },
+});
+
+const currentIndex = allDeYoPaTu.findIndex((dy) => dy.id === id);
+const prevDeYoPaTuLink = allDeYoPaTu[currentIndex - 1]?.id || null;
+const nextDeYoPaTuLink = allDeYoPaTu[currentIndex + 1]?.id || null;
+
+const maxLength = 157;
+const description =
+  deyopatu.content.length > maxLength
+    ? deyopatu.content.slice(0, maxLength) + "..."
+    : deyopatu.content + "...";
+
+const total = allDeYoPaTu.length;
+
+const token = Astro.cookies.get(TOKEN_NAME);
+const auth = await authenticateToken(token?.value);
+const isTheAuthor = auth?.userId === deyopatu.creatorId;
+---
+
+<Layout
+  description={description}
+  image={deyopatu.thumbnailSrc
+    ? deyopatu.thumbnailSrc
+    : "/assets/thumbnails/home.png"}
+  remoteAssets={deyopatu.thumbnailSrc ? true : false}
+  title={deyopatu.title || "De Yo Pa Tu"}
+>
+  <DeYoPaTuView
+    creator={deyopatu.creator}
+    currentIndex={currentIndex}
+    deyopatu={deyopatu}
+    isTheAuthor={isTheAuthor}
+    nextDeYoPaTuLink={nextDeYoPaTuLink || ""}
+    prevDeYoPaTuLink={prevDeYoPaTuLink || ""}
+    total={total}
+  />
+</Layout>

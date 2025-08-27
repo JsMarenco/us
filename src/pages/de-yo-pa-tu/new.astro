@@ -4,12 +4,6 @@
 // Current project dependencies
 import Layout from "../../layouts/Main.astro";
 import DeYoPaTuForm from "../../components/Forms/DeYoPaTu";
-import prisma from "../../lib/prisma";
-import type { User } from "../../schemas/user";
-
-const users = (await prisma.user.findMany({
-  omit: { hashedPassword: true },
-})) as unknown as User[];
 ---
 
 <Layout
@@ -17,5 +11,5 @@ const users = (await prisma.user.findMany({
   image="/assets/thumbnails/home.png"
   title="Crear DeYoPaTu"
 >
-  <DeYoPaTuForm client:load users={users} />
+  <DeYoPaTuForm client:load />
 </Layout>

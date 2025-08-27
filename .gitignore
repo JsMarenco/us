@@ -29,3 +29,6 @@ yarn.lock
 package-lock.json
 
 /src/generated/prisma
+/temp/
+
+mongo_keyfile

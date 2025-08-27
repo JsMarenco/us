@@ -66,7 +66,10 @@ const HamburgerMenu = () => {
                   transition={{ duration: 0.2 }}
                 >
                   <img
-                    src={user.avatarSrc}
+                    src={
+                      user.avatarSrc ||
+                      `https://api.dicebear.com/9.x/identicon/svg?seed=${user.username}`
+                    }
                     alt={`${user.firstName} ${user.lastName}`}
                     className="h-10 w-10 rounded-full object-cover"
                   />

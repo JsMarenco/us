@@ -10,10 +10,10 @@
 const navLinks = [{ label: "Inicio", href: "/" }];
 
 export const hamburguerNavLinks = [
-  {
-    label: "Avatars",
-    links: [{ label: "Todos los Avatars", href: "/avatars" }],
-  },
+  // {
+  //   label: "Avatars",
+  //   links: [{ label: "Todos los Avatars", href: "/avatars" }],
+  // },
   {
     label: "De yo pa tu's",
     links: [
@@ -21,13 +21,13 @@ export const hamburguerNavLinks = [
       { label: "Ver todos", href: "/de-yo-pa-tu" },
     ],
   },
-  {
-    label: "Planes futuros",
-    links: [
-      { label: "Crear nuevo", href: "/future-plans/new" },
-      { label: "Ver todos", href: "/future-plans" },
-    ],
-  },
+  // {
+  //   label: "Planes futuros",
+  //   links: [
+  //     { label: "Crear nuevo", href: "/future-plans/new" },
+  //     { label: "Ver todos", href: "/future-plans" },
+  //   ],
+  // },
   {
     label: "User",
     links: [{ label: "Editar Usuario", href: "/me/edit" }],

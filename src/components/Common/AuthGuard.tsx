@@ -3,6 +3,7 @@ import { useEffect, type ReactNode } from "react";
 
 // Current project dependencies
 import useAuth from "../../hooks/useAuth.tsx";
+import BookLoader from "../Loaders/Book/index.tsx";
 
 export default function AuthGuard({ children }: { children: ReactNode }) {
   const { fetchMainUser, loading, user } = useAuth();
@@ -20,7 +21,7 @@ export default function AuthGuard({ children }: { children: ReactNode }) {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center text-gray-600 dark:text-gray-300">
-        Cargando...
+        <BookLoader />
       </div>
     );
   }

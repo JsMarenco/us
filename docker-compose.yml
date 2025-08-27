@@ -1,0 +1,72 @@
+services:
+  mongo:
+    image: "mongo:latest"
+    container_name: cocoton_mongo
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "chmod 400 /etc/mongo/keyfile && mongod --bind_ip_all --replSet rs0 --keyFile /etc/mongo/keyfile",
+      ]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./mongo_keyfile:/etc/mongo/keyfile
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+
+  minio:
+    image: "minio/minio:latest"
+    container_name: cocoton_minio
+    ports:
+      - "${MINIO_API_PORT}:${MINIO_API_PORT}"
+      - "${MINIO_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}"
+    command: server --address ":${MINIO_API_PORT}" --console-address ":${MINIO_CONSOLE_PORT}" /storage
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/storage
+
+  minio-init:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+        sleep 10 &&
+        mc alias set localminio http://minio:${MINIO_API_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} &&
+        mc mb localminio/${MINIO_BUCKET_NAME} || true &&
+        mc anonymous set download localminio/${MINIO_BUCKET_NAME} || true &&
+        mc admin user add localminio ${MINIO_DEPLOY_USER} ${MINIO_DEPLOY_PASSWORD} || true &&
+        echo '
+        [
+          {
+            \"AllowedOrigin\": [\"*\"],
+            \"AllowedMethod\": [\"GET\", \"HEAD\", \"OPTIONS\"],
+            \"AllowedHeader\": [\"*\"],
+            \"ExposeHeader\": [
+              \"Content-Range\",
+              \"Accept-Ranges\",
+              \"Content-Length\",
+              \"Content-Type\"
+            ],
+            \"MaxAgeSeconds\": 3000
+          }
+        ]' > /tmp/cors.json &&
+        mc admin policy attach localminio readwrite --user ${MINIO_DEPLOY_USER} || true &&
+        mc admin cors set localminio/${MINIO_BUCKET_NAME} /tmp/cors.json
+      "
+    environment:
+      MINIO_API_PORT: ${MINIO_API_PORT}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_DEPLOY_USER: ${MINIO_DEPLOY_USER}
+      MINIO_DEPLOY_PASSWORD: ${MINIO_DEPLOY_PASSWORD}
+
+volumes:
+  mongo_data:
+  minio_data:

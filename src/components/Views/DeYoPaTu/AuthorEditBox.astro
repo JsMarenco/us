@@ -1,0 +1,32 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+
+type Props = {
+  deyopatuId: string;
+};
+
+const { deyopatuId } = Astro.props;
+---
+
+<div class="mx-auto w-full max-w-3xl">
+  <div
+    class="mx-auto w-full rounded-xl border border-white/40 bg-white/70 p-6 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-800/40"
+  >
+    <div
+      class="text-md flex flex-col gap-4 font-semibold md:flex-row md:items-center md:justify-between"
+    >
+      <span class="text-center text-gray-700 md:text-left dark:text-gray-200">
+        ¿Sentís que te faltó algo?
+      </span>
+
+      <a
+        class="w-full rounded-xl border border-gray-200/50 bg-gray-100/70 px-6 py-3 text-center font-semibold text-teal-700 shadow-md backdrop-blur-sm transition-colors hover:bg-teal-600 hover:text-white hover:shadow-lg sm:w-auto dark:border-gray-700/50 dark:bg-gray-800/70 dark:text-gray-100 dark:hover:bg-teal-600"
+        href={`/de-yo-pa-tu/${deyopatuId}/edit`}
+      >
+        Editar
+      </a>
+    </div>
+  </div>
+</div>

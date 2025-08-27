@@ -1,0 +1,36 @@
+---
+// Third-party dependencies
+import type { User } from "@prisma/client";
+
+// Current project dependencies
+import timeAgo from "../../../utils/timeAgo";
+import ShareButton from "./ShareButton";
+
+type Props = {
+  writtenAt: string;
+  creator: User;
+  views?: number;
+};
+
+const { writtenAt, creator } = Astro.props;
+const currentUrl = Astro.url;
+---
+
+<div class="mt-4 flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-400">
+  <div class="flex items-center justify-between">
+    <span>
+      Por:{" "}
+      <strong class="text-gray-900 dark:text-gray-100">
+        {`${creator.firstName || ""} ${creator.lastName || ""}`}
+      </strong>
+    </span>
+
+    <strong class="font-semibold text-teal-600 capitalize dark:text-teal-100">
+      {writtenAt ? `${timeAgo(writtenAt)}` : "fecha desconocida"}
+    </strong>
+
+    <ShareButton client:load url={String(currentUrl)}>
+      ¿Te gustó esto? Compártelo
+    </ShareButton>
+  </div>
+</div>

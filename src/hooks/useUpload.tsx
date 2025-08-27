@@ -4,7 +4,17 @@ import axios from "axios";
 
 // Current project dependencies
 
-export default function useUpload() {
+export default function useUpload({
+  handleNewNotification,
+}: {
+  handleNewNotification: ({
+    message,
+    type,
+  }: {
+    message: string;
+    type: "error" | "success" | "info" | "warning";
+  }) => void;
+}) {
   const [file, setFile] = useState<File | null>(null);
   const [src, setSrc] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -32,14 +42,28 @@ export default function useUpload() {
         withCredentials: true,
       });
 
+      handleNewNotification({
+        message: response.data.message,
+        type: response.data.success ? "success" : "error",
+      });
+
       setSrc(response.data.data.url || null);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || err.message);
+        handleNewNotification({
+          message: err.response?.data?.message || err.message,
+          type: "error",
+        });
       } else if (err instanceof Error) {
-        setError(err.message);
+        handleNewNotification({
+          message: err.message,
+          type: "error",
+        });
       } else {
-        setError("Error desconocido al subir archivo");
+        handleNewNotification({
+          message: "Error desconocido al subir archivo",
+          type: "error",
+        });
       }
       setSrc(null);
     } finally {

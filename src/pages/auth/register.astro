@@ -4,24 +4,6 @@
 // Current project dependencies
 import RegisterForm from "../../components/Forms/Register";
 import Auth from "../../layouts/Auth.astro";
-import prisma from "../../lib/prisma";
-
-export const prerender = false;
-// eslint-disable-next-line astro/no-exports-from-components
-export const ssr = true;
-
-const siteConfig = await prisma.siteConfig.findFirst({
-  where: { key: "SITE_CONFIG" },
-});
-
-if (!siteConfig || !siteConfig.showRegisterPage) {
-  return new Response(null, {
-    status: 302,
-    headers: {
-      Location: new URL("/auth/login", Astro.site).toString(),
-    },
-  });
-}
 ---
 
 <Auth

@@ -35,7 +35,7 @@ export default function BackgroundPortal({
         initial={{ opacity: 0 }}
         animate={{ opacity: hover ? 1 : 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed inset-0 -z-20 h-full w-full blur-xl"
+        className="fixed inset-0 -z-20 h-full w-full"
         style={{
           backgroundImage: `url('${src}')`,
           backgroundSize: "cover",
@@ -47,7 +47,7 @@ export default function BackgroundPortal({
         initial={{ opacity: 0 }}
         animate={{ opacity: hover ? 1 : 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed inset-0 -z-10 h-full w-full bg-white/10 dark:bg-black/70"
+        className="fixed inset-0 -z-10 h-full w-full bg-white/20 backdrop-blur-sm dark:bg-black/70"
       />
     </>,
     container,

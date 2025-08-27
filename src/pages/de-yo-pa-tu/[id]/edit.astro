@@ -1,0 +1,57 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import Layout from "../../../layouts/Main.astro";
+import DeYoPaTuForm from "../../../components/Forms/DeYoPaTu";
+import prisma from "../../../lib/prisma";
+import { TOKEN_NAME } from "../../../constants";
+import authenticateToken from "../../../utils/sessions/authenticateToken";
+import { DeYoPaTuDtoSchema } from "../../../schemas/deyopatu";
+
+export const prerender = false;
+// eslint-disable-next-line astro/no-exports-from-components
+export const ssr = true;
+
+const { id } = Astro.params;
+
+const isValidObjectId = /^[0-9a-fA-F]{24}$/.test(id || "");
+
+if (!isValidObjectId) {
+  return Astro.redirect("/de-yo-pa-tu");
+}
+
+const deyopatu = await prisma.deYoPaTu.findUnique({
+  where: { id },
+  include: { creator: true },
+});
+
+if (!deyopatu) {
+  return Astro.redirect("/de-yo-pa-tu");
+}
+
+const token = Astro.cookies.get(TOKEN_NAME);
+const auth = await authenticateToken(token?.value);
+const isTheAuthor = auth?.userId === deyopatu.creatorId;
+
+if (!isTheAuthor) {
+  return Astro.redirect("/de-yo-pa-tu");
+}
+
+const maxLength = 157;
+const description =
+  deyopatu.content.length > maxLength
+    ? deyopatu.content.slice(0, maxLength) + "..."
+    : deyopatu.content + "...";
+---
+
+<Layout
+  description={description}
+  image={deyopatu.thumbnailSrc
+    ? deyopatu.thumbnailSrc
+    : "/assets/thumbnails/home.png"}
+  remoteAssets={deyopatu.thumbnailSrc ? true : false}
+  title={deyopatu.title || "De Yo Pa Tu"}
+>
+  <DeYoPaTuForm client:load deyopatu={DeYoPaTuDtoSchema.parse(deyopatu)} />
+</Layout>

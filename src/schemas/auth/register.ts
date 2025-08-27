@@ -5,6 +5,12 @@ import { z } from "zod";
 
 export const RegisterDtoSchema = z
   .object({
+    firstName: z
+      .string({ error: "El nombre es obligatorio." })
+      .min(2, "El nombre debe tener al menos 2 caracteres."),
+    lastName: z
+      .string({ error: "El apellido es obligatorio." })
+      .min(2, "El apellido debe tener al menos 2 caracteres."),
     email: z
       .string({ error: "El correo electrónico es obligatorio." })
       .email("El correo electrónico no es válido."),
