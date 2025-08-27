@@ -68,7 +68,7 @@ const deyopatus = await prisma.deYoPaTu.findMany({
                 </span>
                 <span class="ml-2 capitalize">
                   {dy.writtenAt
-                    ? `${timeAgo(dy.writtenAt)}`
+                    ? `${timeAgo(dy.createdAt)}`
                     : "Fecha desconocida"}
                 </span>
               </div>
