@@ -6,6 +6,10 @@ import AvatarsCard from "../components/Cards/Avatars/index";
 import Layout from "../layouts/Main.astro";
 import prisma from "../lib/prisma";
 
+export const prerender = false;
+// eslint-disable-next-line astro/no-exports-from-components
+export const ssr = true;
+
 const avatars = await prisma.avatarPair.findMany();
 
 const formatDate = (date: Date) => {
