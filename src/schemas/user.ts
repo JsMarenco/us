@@ -13,6 +13,14 @@ const UserSchema = z.object({
     message: "El nombre de usuario debe tener al menos 3 caracteres",
   }),
   email: z.string().email({ message: "Debe ser un correo válido" }),
+
+  bio: z
+    .string()
+    .max(300, { message: "La biografía no puede exceder los 300 caracteres" })
+    .optional()
+    .default("")
+    .nullable(),
+
   hashedPassword: z
     .string()
     .min(6, { message: "La contraseña debe tener al menos 6 caracteres" }),
@@ -38,6 +46,12 @@ export const UserEditDtoSchema = z
         message: "El nombre de usuario debe tener al menos 3 caracteres",
       })
       .optional(),
+    bio: z
+      .string()
+      .max(300, { message: "La biografía no puede exceder los 300 caracteres" })
+      .optional()
+      .default("")
+      .nullable(),
     email: z
       .string()
       .email({ message: "Debe ser un correo válido" })

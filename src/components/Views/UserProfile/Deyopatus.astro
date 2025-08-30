@@ -2,35 +2,33 @@
 // Third-party dependencies
 
 // Current project dependencies
-import Layout from "../../layouts/Main.astro";
-import prisma from "../../lib/prisma";
-import timeAgo from "../../utils/timeAgo";
+import type { DeYoPaTu } from "@prisma/client";
+import timeAgo from "../../../utils/timeAgo";
 
-export const prerender = false;
-// eslint-disable-next-line astro/no-exports-from-components
-export const ssr = true;
+interface Props {
+  username: string;
+  createdDeYoPaTus: DeYoPaTu[];
+}
 
-const deyopatus = await prisma.deYoPaTu.findMany({
-  include: {
-    creator: true,
-  },
-});
+const { username, createdDeYoPaTus } = Astro.props;
 ---
 
-<Layout
-  description="Lee los DeYoPaTus creados para vos o por vos."
-  image="/assets/thumbnails/home.png"
-  title={`DeYoPaTus (${deyopatus.length})`}
->
+<section class="mx-auto mt-6 w-full">
+  <h2
+    class="mb-6 px-4 text-center text-2xl font-bold text-gray-800 dark:text-gray-100"
+  >
+    DeYoPaTus de {username}
+  </h2>
+
   <div class="space-y-6">
     {
-      deyopatus.length === 0 ? (
-        <p class="text-center text-gray-600 dark:text-gray-300">
+      createdDeYoPaTus.length === 0 ? (
+        <p class="px-4 text-center text-gray-600 dark:text-gray-300">
           No hay DeYoPaTus aún.
         </p>
       ) : (
         <div class="mx-auto max-w-5xl columns-1 gap-4 space-y-4 sm:columns-2">
-          {deyopatus.map((dy) => (
+          {createdDeYoPaTus.map((dy) => (
             <a
               class="mb-4 inline-block w-full break-inside-avoid rounded-xl border border-gray-200/60 bg-white/40 p-4 shadow-sm backdrop-blur-sm transition hover:bg-white/70 hover:shadow-md dark:border-gray-700/50 dark:bg-gray-800/40 dark:hover:bg-gray-800/70"
               href={`/de-yo-pa-tu/${dy.id}`}
@@ -42,35 +40,23 @@ const deyopatus = await prisma.deYoPaTu.findMany({
                     class="mb-6 h-auto w-full rounded-lg object-cover"
                     loading="lazy"
                     src={dy.thumbnailSrc}
-                    transition:animate="slide"
                   />
                 </div>
               )}
-
               {dy.title && (
                 <h3 class="mb-1 line-clamp-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
                   {dy.title}
                 </h3>
               )}
-
               <p class="mb-3 truncate text-gray-700 dark:text-gray-300">
                 {dy.content.length > 160
                   ? dy.content.slice(0, 160) + "..."
                   : dy.content}
               </p>
-
-              <div class="mt-2 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>
-                  Por:{" "}
-                  <strong class="text-gray-900 dark:text-gray-100">
-                    {`${dy.creator.firstName} ${dy.creator.lastName}`}
-                  </strong>
-                </span>
-                <span class="ml-2 capitalize">
-                  {dy.createdAt
-                    ? `Publicado ${timeAgo(dy.createdAt)}`
-                    : "Fecha desconocida"}
-                </span>
+              <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                {dy.createdAt
+                  ? `Publicado ${timeAgo(dy.createdAt)}`
+                  : "Fecha desconocida"}
               </div>
             </a>
           ))}
@@ -78,4 +64,4 @@ const deyopatus = await prisma.deYoPaTu.findMany({
       )
     }
   </div>
-</Layout>
+</section>

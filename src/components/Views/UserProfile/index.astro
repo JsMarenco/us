@@ -1,0 +1,18 @@
+---
+// Third-party dependencies
+import type { DeYoPaTu, User } from "@prisma/client";
+
+// Current project dependencies
+import Header from "./Header.astro";
+import Deyopatus from "./Deyopatus.astro";
+
+type Props = {
+  user: User;
+  createdDeYoPaTus: DeYoPaTu[];
+};
+
+const { user, createdDeYoPaTus } = Astro.props;
+---
+
+<Header user={user} />
+<Deyopatus createdDeYoPaTus={createdDeYoPaTus} username={user.username} />

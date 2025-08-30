@@ -8,6 +8,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Layout {
+  DEFAULT
+  BRUTALISM
+}
+
 enum PlanPriority {
   HIGH
   MEDIUM
@@ -30,6 +35,8 @@ model User {
   lastName       String?
   avatarSrc      String? @default("")
 
+  bio String? @default("")
+
   resetTokenHash      String?   @default("")
   resetTokenCreatedAt DateTime?
   resetTokenExpiresAt DateTime?
@@ -41,7 +48,9 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  createdDeYoPaTus  DeYoPaTu[] @relation("CreatedDeYoPaTus")
+  profileLayout Layout @default(DEFAULT)
+
+  createdDeYoPaTus DeYoPaTu[] @relation("CreatedDeYoPaTus")
 
   FuturePlan FuturePlan[] @relation("ProposedPlans")
   Session    Session[]
@@ -84,7 +93,7 @@ model AvatarPair {
 model DeYoPaTu {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  creatorId   String @db.ObjectId
+  creatorId String @db.ObjectId
 
   title                String?  @default("")
   spotifyEmbedTrackSrc String?  @default("")
@@ -92,7 +101,7 @@ model DeYoPaTu {
   writtenAt            DateTime
   thumbnailSrc         String?  @default("")
 
-  creator   User @relation("CreatedDeYoPaTus", fields: [creatorId], references: [id])
+  creator User @relation("CreatedDeYoPaTus", fields: [creatorId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

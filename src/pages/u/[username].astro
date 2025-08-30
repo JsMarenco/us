@@ -1,0 +1,37 @@
+---
+// Third-party dependencies
+
+// Current project dependencies
+import Layout from "../../layouts/Main.astro";
+import prisma from "../../lib/prisma";
+import UserProfile from "../../components/Views/UserProfile/index.astro";
+
+export const prerender = false;
+// eslint-disable-next-line astro/no-exports-from-components
+export const ssr = true;
+
+const { username } = Astro.params;
+
+const user = await prisma.user.findUnique({
+  where: { username },
+});
+
+if (!user) {
+  return Astro.redirect("/de-yo-pa-tu");
+}
+
+const { firstName, lastName, avatarSrc, bio } = user;
+
+const createdDeYoPaTus = await prisma.deYoPaTu.findMany({
+  where: { creatorId: user.id },
+});
+---
+
+<Layout
+  description={bio ||
+    `DeYoPaTus creados por ${firstName || lastName ? `${firstName ?? ""} ${lastName ?? ""}`.trim() : username}.`}
+  image={avatarSrc || "/assets/thumbnails/home.png"}
+  title={`${firstName || lastName ? `${firstName ?? ""} ${lastName ?? ""}`.trim() : username} (@${username})`}
+>
+  <UserProfile createdDeYoPaTus={createdDeYoPaTus} user={user} />
+</Layout>

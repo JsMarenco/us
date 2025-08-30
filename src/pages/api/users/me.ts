@@ -1,14 +1,12 @@
 // Third-party dependencies
 import type { APIRoute } from "astro";
-import bcrypt from "bcryptjs";
 
 // Current project dependencies
-import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
-import validateToken from "../../../utils/validateToken";
 import { TOKEN_NAME } from "../../../constants";
 import authenticateToken from "../../../utils/sessions/authenticateToken";
 import { UserPublicSchema } from "../../../schemas/user";
+import httpStatus from "../../../constants/httpStatus";
 
 export const prerender = false;
 
@@ -23,7 +21,7 @@ export const GET: APIRoute = async ({ cookies }) => {
         data: { error: "No autorizado." },
         message: "Inicia sesión primero.",
         success: false,
-        status: 401,
+        status: httpStatus.unauthorized.code,
       });
     }
 
@@ -34,7 +32,7 @@ export const GET: APIRoute = async ({ cookies }) => {
         data: { error: "Usuario no encontrado." },
         message: "Usuario no encontrado.",
         success: false,
-        status: 404,
+        status: httpStatus.noContent.code,
       });
     }
 
@@ -42,7 +40,7 @@ export const GET: APIRoute = async ({ cookies }) => {
       data: UserPublicSchema.parse(user),
       message: "Usuario autenticado obtenido correctamente.",
       success: true,
-      status: 200,
+      status: httpStatus.ok.code,
     });
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -51,7 +49,7 @@ export const GET: APIRoute = async ({ cookies }) => {
       data: { error: "Error interno del servidor." },
       message: "Error interno del servidor.",
       success: false,
-      status: 500,
+      status: httpStatus.serverError.code,
     });
   }
 };

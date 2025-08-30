@@ -58,12 +58,13 @@ const HamburgerMenu = () => {
               transition={{ type: "tween", duration: 0.25 }}
             >
               {!loading && !error && user && (
-                <motion.div
+                <motion.a
                   className="flex items-center gap-3 border-b border-gray-200 p-4 backdrop-blur-xs dark:border-gray-700"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
+                  href={`/u/${user.username}`}
                 >
                   <img
                     src={
@@ -82,7 +83,7 @@ const HamburgerMenu = () => {
                       @{user.username}
                     </span>
                   </div>
-                </motion.div>
+                </motion.a>
               )}
 
               <div className="scrollbar flex-1 overflow-y-auto p-2">

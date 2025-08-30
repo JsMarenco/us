@@ -43,8 +43,16 @@ const {
         class="mx-auto w-full max-w-3xl rounded-xl border border-white/40 bg-white/70 p-6 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-800/40"
       >
         {
+          deyopatu.title && (
+            <h1 class="mb-4 text-4xl font-bold text-teal-700 dark:text-teal-400">
+              {deyopatu.title}
+            </h1>
+          )
+        }
+
+        {
           deyopatu.thumbnailSrc && (
-            <div class="mx-auto w-full max-w-xl">
+            <div class="mx-auto mb-4 w-full max-w-xl">
               <img
                 alt={deyopatu.title}
                 class="mb-6 h-auto w-full rounded-lg object-cover"
@@ -53,14 +61,6 @@ const {
                 transition:animate="slide"
               />
             </div>
-          )
-        }
-
-        {
-          deyopatu.title && (
-            <h1 class="text-4xl font-bold text-teal-700 dark:text-teal-400">
-              {deyopatu.title}
-            </h1>
           )
         }
 
