@@ -18,7 +18,7 @@ export const DeYoPaTuSchema = z.object({
     .refine(
       (val) =>
         val === "" ||
-        /^https?:\/\/open\.spotify\.com\/(track|playlist|album)\/[a-zA-Z0-9]+/.test(
+        /^https?:\/\/open\.spotify\.com\/(embed\/)?(track|playlist|album)\/[a-zA-Z0-9]+(\?[a-zA-Z0-9=&_-]+)?/.test(
           val,
         ),
       {
@@ -45,7 +45,7 @@ export const DeYoPaTuDtoSchema = z.object({
     .refine(
       (val) =>
         val === "" ||
-        /^https?:\/\/open\.spotify\.com\/(track|playlist|album)\/[a-zA-Z0-9]+/.test(
+        /^https?:\/\/open\.spotify\.com\/(embed\/)?(track|playlist|album)\/[a-zA-Z0-9]+(\?[a-zA-Z0-9=&_-]+)?/.test(
           val,
         ),
       {
