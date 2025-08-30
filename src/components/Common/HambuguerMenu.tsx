@@ -88,41 +88,43 @@ const HamburgerMenu = () => {
 
               <div className="scrollbar flex-1 overflow-y-auto p-2">
                 <nav className="flex flex-col gap-4">
-                  {hamburguerNavLinks.map((section) => (
-                    <motion.div
-                      key={section.label}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className="flex flex-col gap-1"
-                    >
-                      <motion.span
-                        className="px-4 py-2 text-sm font-extrabold tracking-wide text-gray-800 uppercase dark:text-gray-200"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ delay: 0.1 }}
+                  {hamburguerNavLinks({ username: user?.username || "" }).map(
+                    (section) => (
+                      <motion.div
+                        key={section.label}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="flex flex-col gap-1"
                       >
-                        {section.label}
-                      </motion.span>
-
-                      {section.links.map((link, index) => (
-                        <motion.a
-                          key={link.href}
-                          href={link.href}
-                          onClick={() => setIsOpen(false)}
-                          className="rounded-md px-4 py-2 text-base font-light text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-white/10"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -10 }}
-                          transition={{ delay: 0.15 + index * 0.05 }}
+                        <motion.span
+                          className="px-4 py-2 text-sm font-extrabold tracking-wide text-gray-800 uppercase dark:text-gray-200"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ delay: 0.1 }}
                         >
-                          {link.label}
-                        </motion.a>
-                      ))}
-                    </motion.div>
-                  ))}
+                          {section.label}
+                        </motion.span>
+
+                        {section.links.map((link, index) => (
+                          <motion.a
+                            key={link.href}
+                            href={link.href}
+                            onClick={() => setIsOpen(false)}
+                            className="rounded-md px-4 py-2 text-base font-light text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-white/10"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -10 }}
+                            transition={{ delay: 0.15 + index * 0.05 }}
+                          >
+                            {link.label}
+                          </motion.a>
+                        ))}
+                      </motion.div>
+                    ),
+                  )}
                 </nav>
               </div>
 

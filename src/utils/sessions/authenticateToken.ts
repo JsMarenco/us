@@ -36,7 +36,7 @@ const authenticateToken = async (
 
   if (!user) return null;
 
-  return { user, userId: payload.id };
+  return { user, userId: payload.id, username: user.username };
 };
 
 export default authenticateToken;

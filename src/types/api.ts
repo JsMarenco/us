@@ -10,4 +10,5 @@ export interface JwtUserPayload {
 export interface AuthResult {
   user: User;
   userId: string;
+  username: string;
 }
