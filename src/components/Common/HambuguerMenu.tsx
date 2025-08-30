@@ -7,6 +7,7 @@ import axios from "axios";
 // Current project dependencies
 import cn from "../../utils/cn";
 import { hamburguerNavLinks } from "../../constants/nav";
+import { defaultAvatar } from "../../constants";
 import useAuth from "../../hooks/useAuth";
 
 const HamburgerMenu = () => {
@@ -67,10 +68,7 @@ const HamburgerMenu = () => {
                   href={`/u/${user.username}`}
                 >
                   <img
-                    src={
-                      user.avatarSrc ||
-                      `https://api.dicebear.com/9.x/identicon/svg?seed=${user.username}`
-                    }
+                    src={defaultAvatar(user.avatarSrc, user.username)}
                     alt={`${user.firstName} ${user.lastName}`}
                     className="h-10 w-10 rounded-full object-cover"
                   />

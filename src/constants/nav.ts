@@ -30,13 +30,14 @@ export const hamburguerNavLinks = ({ username }: { username?: string }) => {
     //   ],
     // },
     {
-      label: "User",
+      label: "Personal",
       links: [
         {
           label: "Mi Perfil",
           href: `/u/${username}`,
         },
         { label: "Editar Usuario", href: "/me/edit" },
+        { label: "Usuairos", href: "/users" },
       ],
     },
   ];
