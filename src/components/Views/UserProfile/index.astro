@@ -3,8 +3,8 @@
 import type { DeYoPaTu, User } from "@prisma/client";
 
 // Current project dependencies
-import Header from "./Header.astro";
 import Deyopatus from "./Deyopatus.astro";
+import UserProfileHeader from "../../Forms/EditUser/UserProfileHeader";
 
 type Props = {
   user: User;
@@ -14,5 +14,5 @@ type Props = {
 const { user, createdDeYoPaTus } = Astro.props;
 ---
 
-<Header user={user} />
+<UserProfileHeader client:load user={user} />
 <Deyopatus createdDeYoPaTus={createdDeYoPaTus} username={user.username} />

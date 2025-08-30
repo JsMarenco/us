@@ -10,26 +10,20 @@ import axios from "axios";
 import { motion } from "framer-motion";
 
 // Current project dependencies
-import { UserEditDtoSchema, type UserEditDto } from "../../schemas/user";
-import useAuth from "../../hooks/useAuth";
-import useUpload from "../../hooks/useUpload";
-import FormContainer from "./Container";
-import useNotification from "../../hooks/useNotification";
-import getFirstZodErrorMessage from "../../utils/getFirstZodErrorMessage";
-import FormSection from "./FormSection";
+import { UserEditDtoSchema, type UserEditDto } from "../../../schemas/user";
+import useAuth from "../../../hooks/useAuth";
+import useUpload from "../../../hooks/useUpload";
+import FormContainer from "../Container";
+import useNotification from "../../../hooks/useNotification";
+import getFirstZodErrorMessage from "../../../utils/getFirstZodErrorMessage";
+import FormSection from "../FormSection";
+import UserProfileHeader from "./UserProfileHeader";
+import FileUploadButtons from "./FileUploadButtons";
 
 export default function EditUserForm() {
   const { handleNewNotification, NotificationPortal } = useNotification();
 
   const { user, loading: userLoading } = useAuth();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const {
-    src: avatarSrc,
-    handleSelectFile,
-    handleUploadFile,
-    handleReset,
-    loading: uploadingAvatar,
-  } = useUpload({ handleNewNotification });
 
   const [form, setForm] = useState<UserEditDto>({
     firstName: "",
@@ -39,8 +33,9 @@ export default function EditUserForm() {
     currentPassword: "",
     newPassword: "",
     confirmNewPassword: "",
-    avatarSrc: "",
-    bio: "",
+    avatarSrc: user?.avatarSrc || "",
+    bannerSrc: user?.bannerSrc || "",
+    bio: user?.bio || null,
   });
 
   const [loading, setLoading] = useState(false);
@@ -92,18 +87,11 @@ export default function EditUserForm() {
         username: user.username || "",
         email: user.email || "",
         bio: user.bio || "",
+        avatarSrc: user.avatarSrc || "",
+        bannerSrc: user.bannerSrc || "",
       }));
     }
   }, [user]);
-
-  useEffect(() => {
-    if (avatarSrc) {
-      setForm((prev) => ({
-        ...prev,
-        avatarSrc,
-      }));
-    }
-  }, [avatarSrc]);
 
   return (
     <>
@@ -111,58 +99,37 @@ export default function EditUserForm() {
 
       <FormContainer title="Editar usuario">
         <form onSubmit={handleSubmit} className="mx-auto w-full space-y-4">
-          <FormSection subtitle="Avatar">
-            <input
-              type="file"
-              className="hidden"
-              ref={fileInputRef}
-              accept="image/*"
-              onChange={(e) =>
-                e.target.files && handleSelectFile(e.target.files[0])
-              }
-            />
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="relative col-span-full flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
-                <img
-                  src={
-                    user?.avatarSrc ||
-                    `https://api.dicebear.com/9.x/identicon/svg?seed=${user?.username}`
+          <FormSection subtitle="Avatar y banner">
+            <UserProfileHeader
+              user={{
+                username: form.username || "",
+                firstName: form.firstName || "",
+                lastName: form.lastName || "",
+                bio: form.bio,
+                avatarSrc: form.avatarSrc,
+                bannerSrc: form.bannerSrc,
+              }}
+            >
+              <div className="my-4 flex w-full flex-col items-center justify-center space-y-2">
+                <FileUploadButtons
+                  handleNewNotification={handleNewNotification}
+                  userFileSrc={user?.avatarSrc || null}
+                  label="avatar"
+                  onFileUpload={(src) =>
+                    setForm((prev) => ({ ...prev, avatarSrc: src }))
                   }
-                  alt="Actual"
-                  className="h-32 w-32 cursor-pointer rounded-full border-2 border-gray-300"
-                  onClick={() => fileInputRef.current?.click()}
                 />
 
-                <span className="rotate-90 text-5xl font-bold text-gray-500 sm:rotate-0 sm:text-7xl">
-                  →
-                </span>
-
-                <img
-                  src={
-                    avatarSrc ||
-                    `https://api.dicebear.com/9.x/identicon/svg?seed=${user?.username}`
+                <FileUploadButtons
+                  handleNewNotification={handleNewNotification}
+                  userFileSrc={user?.bannerSrc || null}
+                  label="banner"
+                  onFileUpload={(src) =>
+                    setForm((prev) => ({ ...prev, bannerSrc: src }))
                   }
-                  alt="Nueva"
-                  className="h-32 w-32 rounded-full border-2 border-blue-500"
                 />
               </div>
-
-              <button
-                className="rounded-xl bg-green-600 px-4 py-2 text-white"
-                onClick={handleUploadFile}
-                disabled={loading}
-              >
-                {uploadingAvatar ? "Subiendo..." : "Subir"}
-              </button>
-
-              <button
-                className="rounded-xl bg-red-500 px-4 py-2 text-white"
-                onClick={handleReset}
-              >
-                Cancelar
-              </button>
-            </div>
+            </UserProfileHeader>
           </FormSection>
 
           <FormSection subtitle="Detalles del perfil">

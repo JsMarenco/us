@@ -34,8 +34,8 @@ model User {
   firstName      String?
   lastName       String?
   avatarSrc      String? @default("")
-
-  bio String? @default("")
+  bannerSrc      String? @default("")
+  bio            String? @default("")
 
   resetTokenHash      String?   @default("")
   resetTokenCreatedAt DateTime?
