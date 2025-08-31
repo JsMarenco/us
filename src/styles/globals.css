@@ -51,3 +51,19 @@ option {
     color: #f3f4f6;
   }
 }
+
+@keyframes slow-pan {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-10px, -10px) scale(1.02);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.slow-move {
+  animation: slow-pan 20s ease-in-out infinite;
+}

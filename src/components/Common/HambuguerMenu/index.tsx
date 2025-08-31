@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 
 // Current project dependencies
-import cn from "../../utils/cn";
-import { hamburguerNavLinks } from "../../constants/nav";
-import { defaultAvatar } from "../../constants";
-import useAuth from "../../hooks/useAuth";
+import cn from "../../../utils/cn";
+import { hamburguerNavLinks } from "../../../constants/nav";
+import { defaultAvatar } from "../../../constants";
+import useAuth from "../../../hooks/useAuth";
+import UserMenuWidget from "./UserMenuWidget";
 
 const HamburgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,31 +59,16 @@ const HamburgerMenu = () => {
               exit={{ x: "-100%" }}
               transition={{ type: "tween", duration: 0.25 }}
             >
-              {!loading && !error && user && (
-                <motion.a
-                  className="flex items-center gap-3 border-b border-gray-200 p-4 backdrop-blur-xs dark:border-gray-700"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  href={`/u/${user.username}`}
-                >
-                  <img
-                    src={defaultAvatar(user.avatarSrc, user.username)}
-                    alt={`${user.firstName} ${user.lastName}`}
-                    className="h-10 w-10 rounded-full object-cover"
-                  />
-
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-gray-800 dark:text-gray-200">
-                      {user.firstName} {user.lastName}
-                    </span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      @{user.username}
-                    </span>
-                  </div>
-                </motion.a>
-              )}
+              <UserMenuWidget
+                user={{
+                  username: user?.username || "",
+                  firstName: user?.firstName || "",
+                  lastName: user?.lastName || "",
+                  avatarSrc: user?.avatarSrc || "",
+                }}
+                loading={loading}
+                error={error}
+              />
 
               <div className="scrollbar flex-1 overflow-y-auto p-2">
                 <nav className="flex flex-col gap-4">
@@ -134,12 +120,14 @@ const HamburgerMenu = () => {
                   Cerrar menú
                 </button>
 
-                <button
-                  onClick={handleLogout}
-                  className="rounded-md bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
-                >
-                  Logout
-                </button>
+                {user && (
+                  <button
+                    onClick={handleLogout}
+                    className="rounded-md bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700"
+                  >
+                    Logout
+                  </button>
+                )}
               </div>
             </motion.div>
           </>

@@ -4,6 +4,7 @@
 // Current project dependencies
 import Layout from "../../layouts/Main.astro";
 import FuturePlanForm from "../../components/Forms/FuturePlan";
+import AuthGuard from "../../components/Common/AuthGuard";
 ---
 
 <Layout
@@ -11,5 +12,7 @@ import FuturePlanForm from "../../components/Forms/FuturePlan";
   image="/assets/thumbnails/home.png"
   title="Crear Plan Futuro"
 >
-  <FuturePlanForm client:load />
+  <AuthGuard client:only="AuthGuard">
+    <FuturePlanForm client:load />
+  </AuthGuard>
 </Layout>

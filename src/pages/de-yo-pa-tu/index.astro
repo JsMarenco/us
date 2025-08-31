@@ -2,8 +2,11 @@
 // Third-party dependencies
 
 // Current project dependencies
+import UnAuthenticateUserBox from "../../components/Views/DeYoPaTu/UnAuthenticateUserBox.astro";
+import { TOKEN_NAME } from "../../constants";
 import Layout from "../../layouts/Main.astro";
 import prisma from "../../lib/prisma";
+import authenticateToken from "../../utils/sessions/authenticateToken";
 import timeAgo from "../../utils/timeAgo";
 
 export const prerender = false;
@@ -15,6 +18,9 @@ const deyopatus = await prisma.deYoPaTu.findMany({
     creator: true,
   },
 });
+
+const token = Astro.cookies.get(TOKEN_NAME);
+const isAuthenticate = await authenticateToken(token?.value);
 ---
 
 <Layout
@@ -78,4 +84,12 @@ const deyopatus = await prisma.deYoPaTu.findMany({
       )
     }
   </div>
+
+  {
+    !isAuthenticate && (
+      <div class="mt-5 border-t border-gray-300/50 pt-5 dark:border-gray-600/50">
+        <UnAuthenticateUserBox isAuthenticated={Boolean(isAuthenticate)} />
+      </div>
+    )
+  }
 </Layout>

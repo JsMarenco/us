@@ -35,7 +35,7 @@ export default function BackgroundPortal({
         initial={{ opacity: 0 }}
         animate={{ opacity: hover ? 1 : 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="fixed inset-0 -z-20 h-full w-full"
+        className="slow-move fixed inset-0 -z-20 h-full w-full"
         style={{
           backgroundImage: `url('${src}')`,
           backgroundSize: "cover",

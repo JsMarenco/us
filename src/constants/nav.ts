@@ -10,37 +10,39 @@
 const navLinks = [{ label: "Inicio", href: "/" }];
 
 export const hamburguerNavLinks = ({ username }: { username?: string }) => {
-  return [
-    // {
-    //   label: "Avatars",
-    //   links: [{ label: "Todos los Avatars", href: "/avatars" }],
-    // },
-    {
+  const links: { label: string; links: { label: string; href: string }[] }[] =
+    [];
+
+  if (username) {
+    links.push({
       label: "De yo pa tu's",
       links: [
         { label: "Crear nuevo", href: "/de-yo-pa-tu/new" },
         { label: "Ver todos", href: "/de-yo-pa-tu" },
       ],
-    },
-    // {
-    //   label: "Planes futuros",
-    //   links: [
-    //     { label: "Crear nuevo", href: "/future-plans/new" },
-    //     { label: "Ver todos", href: "/future-plans" },
-    //   ],
-    // },
-    {
-      label: "Personal",
-      links: [
-        {
-          label: "Mi Perfil",
-          href: `/u/${username}`,
-        },
-        { label: "Editar Usuario", href: "/me/edit" },
-        { label: "Usuairos", href: "/users" },
-      ],
-    },
-  ];
+    });
+  } else {
+    links.push({
+      label: "De yo pa tu's",
+      links: [{ label: "Ver todos", href: "/de-yo-pa-tu" }],
+    });
+  }
+
+  const personalLinks = [];
+
+  if (username)
+    personalLinks.push({ label: "Mi Perfil", href: `/u/${username}` });
+  if (username)
+    personalLinks.push({ label: "Editar Usuario", href: "/me/edit" });
+
+  personalLinks.push({ label: "Usuairos", href: "/users" });
+
+  links.push({
+    label: "Personal",
+    links: personalLinks,
+  });
+
+  return links;
 };
 
 export default navLinks;

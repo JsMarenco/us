@@ -4,6 +4,7 @@
 // Current project dependencies
 import Layout from "../../layouts/Main.astro";
 import EditUserForm from "../../components/Forms/EditUser";
+import AuthGuard from "../../components/Common/AuthGuard";
 ---
 
 <Layout
@@ -11,5 +12,7 @@ import EditUserForm from "../../components/Forms/EditUser";
   image="/assets/thumbnails/home.png"
   title="Editar perfil"
 >
-  <EditUserForm client:load />
+  <AuthGuard client:only="AuthGuard">
+    <EditUserForm client:load />
+  </AuthGuard>
 </Layout>

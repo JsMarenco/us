@@ -47,8 +47,8 @@ const description =
 const total = allDeYoPaTu.length;
 
 const token = Astro.cookies.get(TOKEN_NAME);
-const auth = await authenticateToken(token?.value);
-const isTheAuthor = auth?.userId === deyopatu.creatorId;
+const isAuthenticate = await authenticateToken(token?.value);
+const isTheAuthor = isAuthenticate?.userId === deyopatu.creatorId;
 ---
 
 <Layout
@@ -63,6 +63,7 @@ const isTheAuthor = auth?.userId === deyopatu.creatorId;
     creator={deyopatu.creator}
     currentIndex={currentIndex}
     deyopatu={deyopatu}
+    isAuthenticate={Boolean(isAuthenticate)}
     isTheAuthor={isTheAuthor}
     nextDeYoPaTuLink={nextDeYoPaTuLink || ""}
     prevDeYoPaTuLink={prevDeYoPaTuLink || ""}

@@ -11,7 +11,6 @@ type Props = {
   writtenAt: string;
   creator: User;
   views?: number;
-  username: string;
 };
 
 const { writtenAt, creator } = Astro.props;
@@ -23,7 +22,8 @@ const currentUrl = Astro.url;
 >
   <div class="flex items-center justify-between">
     <span class="flex items-center gap-2">
-      Por:
+      <span class="font-medium text-gray-700 dark:text-gray-300"> Por: </span>
+
       <a
         class="flex items-center gap-2 rounded-lg bg-gray-100/50 px-3 py-1 transition hover:bg-gray-200/70 dark:bg-gray-800/50 dark:hover:bg-gray-700/60"
         href={`/u/${creator.username}`}
@@ -47,8 +47,10 @@ const currentUrl = Astro.url;
       Copiar enlace
     </ShareButton>
 
-    <span>
-      Publicado:
+    <span class="flex items-center gap-2">
+      <span class="font-medium text-gray-700 dark:text-gray-300">
+        Publicado:
+      </span>
       <strong class="text-gray-900 dark:text-gray-100">
         {writtenAt ? `${timeAgo(writtenAt)}` : "Fecha desconocida"}
       </strong>

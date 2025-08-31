@@ -4,6 +4,7 @@
 // Current project dependencies
 import Layout from "../../layouts/Main.astro";
 import DeYoPaTuForm from "../../components/Forms/DeYoPaTu";
+import AuthGuard from "../../components/Common/AuthGuard";
 ---
 
 <Layout
@@ -11,5 +12,7 @@ import DeYoPaTuForm from "../../components/Forms/DeYoPaTu";
   image="/assets/thumbnails/home.png"
   title="Crear DeYoPaTu"
 >
-  <DeYoPaTuForm client:load />
+  <AuthGuard client:only="AuthGuard">
+    <DeYoPaTuForm client:load />
+  </AuthGuard>
 </Layout>

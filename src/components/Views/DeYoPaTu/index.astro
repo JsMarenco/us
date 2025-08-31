@@ -8,6 +8,7 @@ import AuthorEditBox from "./AuthorEditBox.astro";
 import FooterInfo from "./FooterInfo.astro";
 import Pagination from "./Pagination.astro";
 import SpotifyTrackEmbed from "./SpotifyTrackEmbed.astro";
+import UnAuthenticateUserBox from "./UnAuthenticateUserBox.astro";
 
 type Props = {
   deyopatu: DeYoPaTu;
@@ -17,6 +18,7 @@ type Props = {
   total: number;
   prevDeYoPaTuLink: string;
   nextDeYoPaTuLink: string;
+  isAuthenticate: boolean;
 };
 
 const {
@@ -27,6 +29,7 @@ const {
   nextDeYoPaTuLink,
   prevDeYoPaTuLink,
   total,
+  isAuthenticate,
 } = Astro.props;
 ---
 
@@ -40,7 +43,7 @@ const {
   <div class="w-full max-w-3xl flex-1 space-y-3 overflow-auto text-center">
     <div class="w-full flex-1 space-y-3 overflow-auto rounded-lg text-center">
       <div
-        class="mx-auto w-full max-w-3xl rounded-xl border border-white/40 bg-white/70 p-6 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-800/40"
+        class="mx-auto w-full max-w-3xl rounded-xl border border-white/40 bg-white/80 p-6 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-800/40"
       >
         {
           deyopatu.title && (
@@ -65,7 +68,7 @@ const {
         }
 
         <p
-          class="text-center whitespace-pre-wrap text-gray-700 dark:text-gray-300"
+          class="text-center font-medium whitespace-pre-wrap text-gray-700 dark:text-gray-300"
         >
           {deyopatu.content}
         </p>
@@ -84,6 +87,12 @@ const {
     </div>
 
     {isTheAuthor && <AuthorEditBox deyopatuId={deyopatu.id} />}
+
+    {
+      !isAuthenticate && (
+        <UnAuthenticateUserBox isAuthenticated={isAuthenticate} />
+      )
+    }
 
     <Pagination
       currentIndex={currentIndex}
