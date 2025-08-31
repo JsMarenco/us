@@ -101,6 +101,8 @@ model DeYoPaTu {
   writtenAt            DateTime
   thumbnailSrc         String?  @default("")
 
+  isAnonymous Boolean @default(false)
+
   creator User @relation("CreatedDeYoPaTus", fields: [creatorId], references: [id])
 
   createdAt DateTime @default(now())

@@ -15,6 +15,7 @@ import useUpload from "../../hooks/useUpload";
 import FormContainer from "./Container";
 import useNotification from "../../hooks/useNotification";
 import getFirstZodErrorMessage from "../../utils/getFirstZodErrorMessage";
+import Select from "../Common/Select";
 
 export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
   const { handleNewNotification, NotificationPortal } = useNotification();
@@ -36,6 +37,7 @@ export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
     writtenAt: new Date(),
     spotifyEmbedTrackSrc: deyopatu?.spotifyEmbedTrackSrc || "",
     thumbnailSrc: deyopatu?.thumbnailSrc || "",
+    isAnonymous: deyopatu?.isAnonymous || false,
   });
 
   const [loading, setLoading] = useState(false);
@@ -107,6 +109,11 @@ export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
       }));
     }
   }, [thumbnailSrc]);
+
+  const anonymityItems = [
+    { value: "false", label: "No anónimo" },
+    { value: "true", label: "Anónimo" },
+  ];
 
   return (
     <>
@@ -182,21 +189,34 @@ export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
             </button>
           </div>
 
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            placeholder="Título (opcional)"
-            className="col-span-full w-full rounded-xl border border-white/30 bg-white/20 px-4 py-3 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all focus:border-green-400 focus:ring-2 focus:ring-green-200/50 dark:border-gray-700/50 dark:bg-gray-800/30 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-green-700/50"
-          />
+          <div className="col-span-full grid grid-cols-1 gap-4 md:grid-cols-2">
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Título (opcional)"
+              className="w-full rounded-xl border border-white/30 bg-white/20 px-4 py-3 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all focus:border-green-400 focus:ring-2 focus:ring-green-200/50 dark:border-gray-700/50 dark:bg-gray-800/30 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-green-700/50"
+            />
+
+            <Select
+              items={anonymityItems}
+              value={String(form.isAnonymous)}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  isAnonymous: e === "true",
+                })
+              }
+            />
+          </div>
 
           <textarea
             name="content"
             value={form.content}
             onChange={handleChange}
             placeholder="Escribe tus cosas lindas..."
-            rows={5}
+            rows={15}
             className="col-span-full w-full rounded-xl border border-white/30 bg-white/20 px-4 py-3 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all focus:border-green-400 focus:ring-2 focus:ring-green-200/50 dark:border-gray-700/50 dark:bg-gray-800/30 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-green-700/50"
           />
 

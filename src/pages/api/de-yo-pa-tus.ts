@@ -40,8 +40,14 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       });
     }
 
-    const { title, content, writtenAt, spotifyEmbedTrackSrc, thumbnailSrc } =
-      parsed.data;
+    const {
+      title,
+      content,
+      writtenAt,
+      spotifyEmbedTrackSrc,
+      thumbnailSrc,
+      isAnonymous,
+    } = parsed.data;
 
     const newDeYoPaTu = await prisma.deYoPaTu.create({
       data: {
@@ -51,6 +57,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         writtenAt,
         spotifyEmbedTrackSrc,
         thumbnailSrc,
+        isAnonymous: Boolean(isAnonymous),
       },
     });
 
@@ -114,6 +121,7 @@ export const PUT: APIRoute = async ({ request, cookies }) => {
       writtenAt,
       spotifyEmbedTrackSrc,
       thumbnailSrc,
+      isAnonymous,
     } = parsed.data;
 
     if (!id || id.length !== 24) {
@@ -153,6 +161,7 @@ export const PUT: APIRoute = async ({ request, cookies }) => {
         writtenAt,
         spotifyEmbedTrackSrc,
         thumbnailSrc,
+        isAnonymous: Boolean(isAnonymous),
       },
     });
 

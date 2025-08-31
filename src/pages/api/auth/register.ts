@@ -81,8 +81,8 @@ export const POST: APIRoute = async ({ request }) => {
 
     const newUser = await prisma.user.create({
       data: {
-        username: randomUsername,
-        email,
+        username: randomUsername.toLowerCase().trim(),
+        email: email.toLowerCase().trim(),
         hashedPassword,
         firstName: firstName.trim(),
         lastName: lastName.trim(),
@@ -92,7 +92,7 @@ export const POST: APIRoute = async ({ request }) => {
     return sendResponse({
       data: {
         id: newUser.id,
-        username: newUser.username,
+        username: newUser.username.toLowerCase().trim(),
         email: newUser.email.toLowerCase().trim(),
       },
       message: "Usuario registrado exitosamente",

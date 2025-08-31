@@ -10,6 +10,7 @@ import prisma from "../../../lib/prisma";
 import sendResponse from "../../../utils/sendResponse";
 import { TOKEN_NAME } from "../../../constants";
 import getClientInfo from "../../../utils/getClientInfo";
+import httpStatus from "../../../constants/httpStatus";
 
 export const prerender = false;
 
@@ -24,7 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Credenciales no proporcionadas." },
         message: "Credenciales no proporcionadas.",
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -35,7 +36,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: getFirstZodErrorMessage(parsed.error) },
         message: getFirstZodErrorMessage(parsed.error),
         success: false,
-        status: 400,
+        status: httpStatus.badRequest.code,
       });
     }
 
@@ -50,7 +51,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Credenciales inválidas." },
         message: "Credenciales inválidas.",
         success: false,
-        status: 401,
+        status: httpStatus.unauthorized.code,
       });
     }
 
@@ -61,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
         data: { error: "Credenciales inválidas." },
         message: "Credenciales inválidas.",
         success: false,
-        status: 401,
+        status: httpStatus.unauthorized.code,
       });
     }
 
@@ -101,9 +102,9 @@ export const POST: APIRoute = async ({ request }) => {
         data: { message: "Inicio de sesión exitoso." },
         message: "Inicio de sesión exitoso.",
         success: true,
-        status: 200,
+        status: httpStatus.ok.code,
       }),
-      { status: 200, headers },
+      { status: httpStatus.ok.code, headers },
     );
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -112,7 +113,7 @@ export const POST: APIRoute = async ({ request }) => {
       data: { error: "Error interno del servidor." },
       message: "Error interno del servidor.",
       success: false,
-      status: 500,
+      status: httpStatus.serverError.code,
     });
   }
 };

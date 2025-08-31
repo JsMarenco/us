@@ -67,9 +67,11 @@ const isAuthenticate = await authenticateToken(token?.value);
 
               <div class="mt-2 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                 <span>
-                  Por:{" "}
+                  Autor:{" "}
                   <strong class="text-gray-900 dark:text-gray-100">
-                    {`${dy.creator.firstName} ${dy.creator.lastName}`}
+                    {dy.isAnonymous
+                      ? "Anónimo"
+                      : `${dy.creator.firstName} ${dy.creator.lastName}`}
                   </strong>
                 </span>
                 <span class="ml-2 capitalize">

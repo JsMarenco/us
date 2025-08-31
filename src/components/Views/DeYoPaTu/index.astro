@@ -82,7 +82,11 @@ const {
           )
         }
 
-        <FooterInfo creator={creator} writtenAt={String(deyopatu.createdAt)} />
+        <FooterInfo
+          creator={creator}
+          isAnonymous={deyopatu.isAnonymous}
+          writtenAt={String(deyopatu.createdAt)}
+        />
       </div>
     </div>
 

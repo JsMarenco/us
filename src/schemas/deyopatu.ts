@@ -26,6 +26,12 @@ export const DeYoPaTuSchema = z.object({
       },
     ),
 
+  isAnonymous: z
+    .boolean({
+      error: "El estado de anonimato es obligatorio.",
+    })
+    .default(false),
+
   createdAt: z
     .string()
     .optional()
@@ -53,7 +59,11 @@ export const DeYoPaTuDtoSchema = z.object({
       },
     ),
   thumbnailSrc: z.string().default(""),
-
+  isAnonymous: z
+    .boolean({
+      error: "El estado de anonimato es obligatorio.",
+    })
+    .default(false),
   title: z.string().optional().default(""),
   content: z
     .string({
