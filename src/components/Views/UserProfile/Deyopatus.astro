@@ -8,24 +8,34 @@ import timeAgo from "../../../utils/timeAgo";
 interface Props {
   username: string;
   createdDeYoPaTus: DeYoPaTu[];
+  firstName?: string | null;
+  lastName?: string | null;
 }
 
-const { username, createdDeYoPaTus } = Astro.props;
+const { username, createdDeYoPaTus, firstName, lastName } = Astro.props;
 ---
 
 <section class="mx-auto mt-6 w-full">
   <h2
     class="mb-6 px-4 text-center text-2xl font-bold text-gray-800 dark:text-gray-100"
   >
-    DeYoPaTus de {username}
+    DeYoPaTus de {
+      firstName || lastName
+        ? `${firstName ?? ""} ${lastName ?? ""}`.trim()
+        : username
+    }
   </h2>
 
   <div class="space-y-6">
     {
       createdDeYoPaTus.length === 0 ? (
-        <p class="px-4 text-center text-gray-600 dark:text-gray-300">
-          No hay DeYoPaTus aún.
-        </p>
+        <div class="w-full py-8 text-center text-gray-600 dark:text-gray-300">
+          {`${
+            firstName || lastName
+              ? `${firstName ?? ""} ${lastName ?? ""}`.trim()
+              : username
+          } no ha creado ningún DeYoPaTu todavía.`}
+        </div>
       ) : (
         <div class="mx-auto max-w-5xl columns-1 gap-4 space-y-4 sm:columns-2">
           {createdDeYoPaTus.map((dy) => (

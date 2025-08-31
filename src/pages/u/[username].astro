@@ -22,9 +22,13 @@ if (!user) {
 
 const { firstName, lastName, avatarSrc, bio } = user;
 
-const createdDeYoPaTus = await prisma.deYoPaTu.findMany({
+const allDeYoPaTus = await prisma.deYoPaTu.findMany({
   where: { creatorId: user.id },
 });
+
+const createdDeYoPaTus = allDeYoPaTus.filter(
+  (deYoPaTu) => deYoPaTu.isAnonymous === false || deYoPaTu.isAnonymous === null,
+);
 ---
 
 <Layout

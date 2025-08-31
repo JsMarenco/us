@@ -27,6 +27,11 @@ export default function UserProfileHeader({
 
   const { username, firstName, lastName, bio } = user;
 
+  const name =
+    firstName || lastName
+      ? `${firstName ?? ""} ${lastName ?? ""}`.trim()
+      : username;
+
   return (
     <motion.section
       className="relative w-full overflow-hidden rounded-xl bg-white/10 shadow-xl backdrop-blur-md dark:bg-gray-800/40"
@@ -61,9 +66,16 @@ export default function UserProfileHeader({
         </motion.div>
 
         <h1 className="mt-4 text-center text-3xl font-bold text-gray-900 dark:text-white">
-          {firstName || lastName
-            ? `${firstName ?? ""} ${lastName ?? ""}`.trim()
-            : username}
+          {name.split("").map((char, index) => (
+            <motion.span
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
+              {char}
+            </motion.span>
+          ))}
         </h1>
 
         <p className="mt-1 text-sm text-gray-700 dark:text-gray-200">

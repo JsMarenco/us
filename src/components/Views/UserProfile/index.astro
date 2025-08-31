@@ -15,4 +15,9 @@ const { user, createdDeYoPaTus } = Astro.props;
 ---
 
 <UserProfileHeader client:load user={user} />
-<Deyopatus createdDeYoPaTus={createdDeYoPaTus} username={user.username} />
+<Deyopatus
+  createdDeYoPaTus={createdDeYoPaTus}
+  firstName={user.firstName}
+  lastName={user.lastName}
+  username={user.username}
+/>
