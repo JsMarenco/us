@@ -14,6 +14,9 @@ export const prerender = false;
 export const ssr = true;
 
 const deyopatus = await prisma.deYoPaTu.findMany({
+  orderBy: {
+    createdAt: "desc",
+  },
   include: {
     creator: true,
   },
