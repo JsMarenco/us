@@ -79,7 +79,7 @@ const isAuthenticate = await authenticateToken(token?.value);
                 </span>
                 <span class="ml-2 capitalize">
                   {dy.createdAt
-                    ? `Publicado ${timeAgo(dy.createdAt)}`
+                    ? `Publicado ${timeAgo(dy.createdAt).toLowerCase()}`
                     : "Fecha desconocida"}
                 </span>
               </div>
