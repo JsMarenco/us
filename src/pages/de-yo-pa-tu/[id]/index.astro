@@ -53,10 +53,7 @@ const isTheAuthor = isAuthenticate?.userId === deyopatu.creatorId;
 
 <Layout
   description={description}
-  image={deyopatu.thumbnailSrc
-    ? deyopatu.thumbnailSrc
-    : "/assets/thumbnails/home.png"}
-  remoteAssets={deyopatu.thumbnailSrc ? true : false}
+  image={`/api/de-yo-pa-tus/${deyopatu.id}/og`}
   title={deyopatu.title || "De Yo Pa Tu"}
 >
   <DeYoPaTuView
