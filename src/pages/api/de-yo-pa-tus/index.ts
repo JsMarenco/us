@@ -2,12 +2,12 @@
 import type { APIRoute } from "astro";
 
 // Current project dependencies
-import prisma from "../../lib/prisma";
-import sendResponse from "../../utils/sendResponse";
-import { DeYoPaTuDtoSchema } from "../../schemas/deyopatu";
-import { TOKEN_NAME } from "../../constants";
-import authenticateToken from "../../utils/sessions/authenticateToken";
-import httpStatus from "../../constants/httpStatus";
+import prisma from "../../../lib/prisma";
+import sendResponse from "../../../utils/sendResponse";
+import { DeYoPaTuDtoSchema } from "../../../schemas/deyopatu";
+import { TOKEN_NAME } from "../../../constants";
+import authenticateToken from "../../../utils/sessions/authenticateToken";
+import httpStatus from "../../../constants/httpStatus";
 
 export const prerender = false;
 
