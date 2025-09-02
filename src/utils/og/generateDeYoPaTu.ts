@@ -96,7 +96,7 @@ const generateDeYoPaTuOgImage = ({
 
     const username = creator?.username ? `${creator.username}` : "";
     const host = "cocoton.net";
-    const url = deYoPaTu.isAnonymous ? `${host}/u/${username}` : host;
+    const url = deYoPaTu.isAnonymous ? host : `${host}/u/${username}`;
 
     return createElement(
       "div",
