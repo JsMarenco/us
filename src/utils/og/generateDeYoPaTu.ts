@@ -19,7 +19,11 @@ const generateDeYoPaTuOgImage = ({
       .trim()
       .split("\n")
       .map((line, i) =>
-        createElement("p", { key: i, style: { margin: "0 0 12px 0" } }, line),
+        createElement(
+          "p",
+          { key: i, style: { margin: "0 0 12px 0", textAlign: "center" } },
+          line,
+        ),
       );
   };
 
