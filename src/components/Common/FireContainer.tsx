@@ -2,6 +2,8 @@
 import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 
+// Current project dependencies
+
 interface FireContainerProps {
   createdAt: string;
   children: ReactNode;
@@ -31,7 +33,7 @@ export default function FireContainer({
 
   return (
     <motion.div
-      className="relative overflow-hidden rounded-xl border border-transparent"
+      className="fire-container relative overflow-hidden rounded-xl border border-transparent"
       initial={{ scale: 0.97 }}
       animate={{ scale: 1 }}
       transition={{ type: "spring", stiffness: 200, damping: 15 }}
