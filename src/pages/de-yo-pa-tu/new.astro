@@ -5,6 +5,7 @@
 import Layout from "../../layouts/Main.astro";
 import DeYoPaTuForm from "../../components/Forms/DeYoPaTu";
 import AuthGuard from "../../components/Common/AuthGuard";
+import DeYoPaTuFormOnboarding from "../../components/Onboardings/DeYoPaTuFormOnboarding";
 ---
 
 <Layout
@@ -13,6 +14,8 @@ import AuthGuard from "../../components/Common/AuthGuard";
   title="Crear DeYoPaTu"
 >
   <AuthGuard client:only="AuthGuard">
+    <DeYoPaTuFormOnboarding client:load />
+
     <DeYoPaTuForm client:load />
   </AuthGuard>
 </Layout>

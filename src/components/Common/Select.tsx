@@ -8,10 +8,12 @@ const Select = ({
   value,
   onChange,
   items,
+  containerClassName,
 }: {
   items: { value: string; label: string }[];
   value: string;
   onChange: (v: string) => void;
+  containerClassName?: string;
 }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -30,7 +32,7 @@ const Select = ({
   const selectedLabel = items.find((c) => c.value === value)?.label || "";
 
   return (
-    <div className="relative w-full" ref={ref}>
+    <div className={cn("relative w-full", containerClassName || "")} ref={ref}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}

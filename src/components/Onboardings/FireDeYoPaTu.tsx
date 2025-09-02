@@ -1,38 +1,10 @@
 // Third-party dependencies
-import Joyride, { type Step } from "react-joyride";
-import { useState, useEffect } from "react";
+import { type Step } from "react-joyride";
 
 // Current project dependencies
+import GenericOnboarding from "./GenericOnboarding";
 
 export default function FireDeYoPaTuOnboarding() {
-  const [run, setRun] = useState(false);
-  const [joyrideStyles, setJoyrideStyles] = useState({});
-
-  useEffect(() => {
-    const firstFire = document.querySelector(".fire-container");
-
-    if (!firstFire) return;
-
-    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    setJoyrideStyles({
-      options: {
-        zIndex: 10000,
-        arrowColor: isDark ? "#FFB347" : "#FFD580",
-        backgroundColor: isDark ? "#333" : "#fff",
-        textColor: isDark ? "#f0f0f0" : "#333",
-        overlayColor: isDark ? "rgba(0,0,0,0.6)" : "rgba(0,0,0,0.3)",
-      },
-      tooltipContainer: {
-        boxShadow: isDark
-          ? "0 0 15px rgba(255,150,50,0.4)"
-          : "0 0 10px rgba(0,0,0,0.2)",
-      },
-    });
-
-    setRun(true);
-  }, []);
-
   const steps: Step[] = [
     {
       target: ".fire-container:first-child",
@@ -42,16 +14,10 @@ export default function FireDeYoPaTuOnboarding() {
     },
   ];
 
-  if (!run) return null;
-
   return (
-    <Joyride
+    <GenericOnboarding
       steps={steps}
-      run={run}
-      continuous
-      showSkipButton
-      showProgress
-      styles={joyrideStyles}
+      storageKey="fire-deyopatu-onboarding-seen"
     />
   );
 }

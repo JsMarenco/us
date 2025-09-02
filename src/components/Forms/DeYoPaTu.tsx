@@ -16,6 +16,7 @@ import FormContainer from "./Container";
 import useNotification from "../../hooks/useNotification";
 import getFirstZodErrorMessage from "../../utils/getFirstZodErrorMessage";
 import Select from "../Common/Select";
+import cn from "../../utils/cn";
 
 export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
   const { handleNewNotification, NotificationPortal } = useNotification();
@@ -121,6 +122,7 @@ export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
 
       <FormContainer
         title={deyopatu ? "Editar de-yo-pa-tu " : "Crear un de-yo-pa-tu"}
+        containerClassName="form-container"
       >
         <form
           onSubmit={handleSubmit}
@@ -168,13 +170,19 @@ export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="rounded-xl bg-white/20 px-4 py-2 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all hover:bg-white/30 focus:ring-2 focus:ring-green-200/50 dark:bg-gray-800/30 dark:text-gray-100 dark:hover:bg-gray-800/50 dark:focus:ring-green-700/50"
+              className={cn(
+                "rounded-xl bg-white/20 px-4 py-2 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all hover:bg-white/30 focus:ring-2 focus:ring-green-200/50 dark:bg-gray-800/30 dark:text-gray-100 dark:hover:bg-gray-800/50 dark:focus:ring-green-700/50",
+                file ? "image-loaded" : "select-image",
+              )}
             >
               {file ? "Imagen cargada" : "Seleccionar imagen"}
             </button>
 
             <button
-              className="rounded-xl bg-white/20 px-4 py-2 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all hover:bg-white/30 focus:ring-2 focus:ring-green-200/50 disabled:opacity-50 dark:bg-gray-800/30 dark:text-gray-100 dark:hover:bg-gray-800/50 dark:focus:ring-green-700/50"
+              className={cn(
+                "rounded-xl bg-white/20 px-4 py-2 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all hover:bg-white/30 focus:ring-2 focus:ring-green-200/50 disabled:opacity-50 dark:bg-gray-800/30 dark:text-gray-100 dark:hover:bg-gray-800/50 dark:focus:ring-green-700/50",
+                file ? "" : "upload-image",
+              )}
               onClick={handleUploadFile}
               disabled={uploadingThumbnail}
             >
@@ -182,7 +190,7 @@ export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
             </button>
 
             <button
-              className="rounded-xl bg-white/20 px-4 py-2 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all hover:bg-white/30 focus:ring-2 focus:ring-green-200/50 dark:bg-gray-800/30 dark:text-gray-100 dark:hover:bg-gray-800/50 dark:focus:ring-green-700/50"
+              className="cancel-upload rounded-xl bg-white/20 px-4 py-2 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all hover:bg-white/30 focus:ring-2 focus:ring-green-200/50 dark:bg-gray-800/30 dark:text-gray-100 dark:hover:bg-gray-800/50 dark:focus:ring-green-700/50"
               onClick={handleReset}
             >
               Cancelar
@@ -200,6 +208,7 @@ export default function DeYoPaTuForm({ deyopatu }: { deyopatu?: DeYoPaTuDto }) {
             />
 
             <Select
+              containerClassName="anonymity-select"
               items={anonymityItems}
               value={String(form.isAnonymous)}
               onChange={(e) =>

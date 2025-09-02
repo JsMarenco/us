@@ -3,18 +3,27 @@ import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 // Current project dependencies
+import cn from "../../utils/cn";
 
 interface FormContainerProps {
   children: ReactNode;
   title?: string;
+  containerClassName?: string;
 }
 
-export default function FormContainer({ children, title }: FormContainerProps) {
+export default function FormContainer({
+  children,
+  title,
+  containerClassName,
+}: FormContainerProps) {
   return (
     <motion.div
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full rounded-2xl border border-white/30 p-6 shadow-xl backdrop-blur-md dark:border-gray-700/50"
+      className={cn(
+        "w-full rounded-2xl border border-white/30 p-6 shadow-xl backdrop-blur-md dark:border-gray-700/50",
+        containerClassName,
+      )}
     >
       {title && (
         <motion.h2
