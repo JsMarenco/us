@@ -21,7 +21,16 @@ const generateDeYoPaTuOgImage = ({
       .map((line, i) =>
         createElement(
           "p",
-          { key: i, style: { margin: "0 0 12px 0", textAlign: "center" } },
+          {
+            key: i,
+            style: {
+              margin: "0 0 12px 0",
+              textAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            },
+          },
           line,
         ),
       );
@@ -68,7 +77,7 @@ const generateDeYoPaTuOgImage = ({
               display: "flex",
               flexDirection: "column",
               fontSize: 32,
-              lineHeight: 1.3,
+              lineHeight: 1.1,
               color: "#e0e0e0",
               fontWeight: 400,
               textAlign: "center",
