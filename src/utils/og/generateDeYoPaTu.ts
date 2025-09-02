@@ -77,7 +77,7 @@ const generateDeYoPaTuOgImage = ({
               display: "flex",
               flexDirection: "column",
               fontSize: 32,
-              lineHeight: 1.1,
+              lineHeight: 1.3,
               color: "#e0e0e0",
               fontWeight: 400,
               textAlign: "center",
