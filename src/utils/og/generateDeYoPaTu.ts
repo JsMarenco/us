@@ -95,6 +95,8 @@ const generateDeYoPaTuOgImage = ({
         : "Autor desconocido";
 
     const username = creator?.username ? `${creator.username}` : "";
+    const host = "cocoton.net";
+    const url = deYoPaTu.isAnonymous ? `${host}/u/${username}` : host;
 
     return createElement(
       "div",
@@ -116,11 +118,7 @@ const generateDeYoPaTuOgImage = ({
       },
       [
         createElement("span", { key: "author" }, authorName),
-        createElement(
-          "span",
-          { key: "username" },
-          username ? `cocoton.net/u/${username}` : "cocoton.net",
-        ),
+        createElement("span", { key: "username" }, url),
       ],
     );
   };
