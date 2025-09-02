@@ -2,6 +2,7 @@
 // Third-party dependencies
 
 // Current project dependencies
+import FireContainer from "../../components/Common/FireContainer";
 import UnAuthenticateUserBox from "../../components/Views/DeYoPaTu/UnAuthenticateUserBox.astro";
 import { TOKEN_NAME } from "../../constants";
 import Layout from "../../layouts/Main.astro";
@@ -40,50 +41,53 @@ const isAuthenticate = await authenticateToken(token?.value);
       ) : (
         <div class="mx-auto max-w-5xl columns-1 gap-4 space-y-4 sm:columns-2">
           {deyopatus.map((dy) => (
-            <a
-              class="mb-4 inline-block w-full break-inside-avoid rounded-xl border border-gray-200/60 bg-white/40 p-4 shadow-sm backdrop-blur-sm transition hover:bg-white/70 hover:shadow-md dark:border-gray-700/50 dark:bg-gray-800/40 dark:hover:bg-gray-800/70"
-              href={`/de-yo-pa-tu/${dy.id}`}
-            >
-              {dy.thumbnailSrc && (
-                <div class="mx-auto w-full max-w-xl">
-                  <img
-                    alt={dy.title}
-                    class="mb-6 h-auto w-full rounded-lg object-cover"
-                    loading="lazy"
-                    src={dy.thumbnailSrc}
-                    transition:animate="slide"
-                  />
-                </div>
-              )}
+            <div class="mb-4 inline-block w-full break-inside-avoid rounded-xl">
+              <FireContainer client:load createdAt={String(dy.createdAt)}>
+                <a
+                  class="inline-block w-full break-inside-avoid rounded-xl border border-gray-200/60 bg-white/40 p-4 shadow-sm backdrop-blur-sm transition hover:bg-white/70 hover:shadow-md dark:border-gray-700/50 dark:bg-gray-800/40 dark:hover:bg-gray-800/70"
+                  href={`/de-yo-pa-tu/${dy.id}`}
+                >
+                  {dy.thumbnailSrc && (
+                    <div class="mx-auto w-full max-w-xl">
+                      <img
+                        alt={dy.title}
+                        class="mb-6 h-auto w-full rounded-lg object-cover"
+                        loading="lazy"
+                        src={dy.thumbnailSrc}
+                      />
+                    </div>
+                  )}
 
-              {dy.title && (
-                <h3 class="mb-1 line-clamp-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  {dy.title}
-                </h3>
-              )}
+                  {dy.title && (
+                    <h3 class="mb-1 line-clamp-1 text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      {dy.title}
+                    </h3>
+                  )}
 
-              <p class="mb-3 truncate text-gray-700 dark:text-gray-300">
-                {dy.content.length > 160
-                  ? dy.content.slice(0, 160) + "..."
-                  : dy.content}
-              </p>
+                  <p class="mb-3 truncate text-gray-700 dark:text-gray-300">
+                    {dy.content.length > 160
+                      ? dy.content.slice(0, 160) + "..."
+                      : dy.content}
+                  </p>
 
-              <div class="mt-2 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>
-                  Autor:{" "}
-                  <strong class="text-gray-900 dark:text-gray-100">
-                    {dy.isAnonymous
-                      ? "Anónimo"
-                      : `${dy.creator.firstName} ${dy.creator.lastName}`}
-                  </strong>
-                </span>
-                <span class="ml-2">
-                  {dy.createdAt
-                    ? `Publicado ${timeAgo(dy.createdAt).toLowerCase()}`
-                    : "Fecha desconocida"}
-                </span>
-              </div>
-            </a>
+                  <div class="mt-2 flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                    <span>
+                      Autor:{" "}
+                      <strong class="text-gray-900 dark:text-gray-100">
+                        {dy.isAnonymous
+                          ? "Anónimo"
+                          : `${dy.creator.firstName} ${dy.creator.lastName}`}
+                      </strong>
+                    </span>
+                    <span class="ml-2">
+                      {dy.createdAt
+                        ? `Publicado ${timeAgo(dy.createdAt).toLowerCase()}`
+                        : "Fecha desconocida"}
+                    </span>
+                  </div>
+                </a>
+              </FireContainer>
+            </div>
           ))}
         </div>
       )
