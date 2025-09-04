@@ -13,8 +13,13 @@ export const GET: APIRoute = async ({ params }) => {
   const { username } = params;
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { username: username?.toString().toLowerCase() },
+    const user = await prisma.user.findFirst({
+      where: {
+        username: {
+          equals: username?.toString(),
+          mode: "insensitive",
+        },
+      },
     });
 
     if (!user) {
