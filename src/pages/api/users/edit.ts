@@ -73,7 +73,7 @@ export const PUT: APIRoute = async ({ cookies, request }) => {
       hashedPassword = await bcrypt.hash(newPassword, 10);
     }
 
-    const { confirmNewPassword: _, email, ...userData } = updateData;
+    const { confirmNewPassword: _, email, username, ...userData } = updateData;
 
     const updatedUser = await prisma.user.update({
       where: { id: existingUser.id },
@@ -83,6 +83,9 @@ export const PUT: APIRoute = async ({ cookies, request }) => {
           ? email.toLowerCase().trim()
           : existingUser.email.toLowerCase().trim(),
         hashedPassword,
+        username: username
+          ? username.toLowerCase().trim()
+          : existingUser.username.trim(),
       },
       select: {
         id: true,

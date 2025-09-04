@@ -40,10 +40,18 @@ export default function EditUserForm() {
 
   const [loading, setLoading] = useState(false);
 
+  const normalizeUsername = (u: string) => u.replace(/[^a-zA-Z0-9._-]/g, "_");
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]:
+        e.target.name === "username"
+          ? normalizeUsername(e.target.value)
+          : e.target.value,
+    }));
   };
 
   const handleSubmit = async (e: FormEvent) => {

@@ -9,9 +9,16 @@ const UserSchema = z.object({
   firstName: z.string().optional().default(""),
   lastName: z.string().optional().default(""),
 
-  username: z.string().min(3, {
-    message: "El nombre de usuario debe tener al menos 3 caracteres",
-  }),
+  username: z
+    .string()
+    .min(3, {
+      message: "El nombre de usuario debe tener al menos 3 caracteres",
+    })
+    .regex(/^[a-zA-Z0-9._-]+$/, {
+      message:
+        "El nombre de usuario solo puede contener letras, números, puntos, guiones y guiones bajos",
+    })
+    .optional(),
   email: z.string().email({ message: "Debe ser un correo válido" }),
 
   bio: z
@@ -45,6 +52,12 @@ export const UserEditDtoSchema = z
       .string()
       .min(3, {
         message: "El nombre de usuario debe tener al menos 3 caracteres",
+      })
+      .max(30, {
+        message: "El nombre de usuario no puede exceder los 30 caracteres",
+      })
+      .regex(/^[a-zA-Z0-9._-]+$/, {
+        message: "El nombre de usuario solo puede contener [a-zA-Z0-9._-]",
       })
       .optional(),
     bio: z
