@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ params }) => {
 
   try {
     const user = await prisma.user.findUnique({
-      where: { username: String(username) },
+      where: { username: username?.toString().toLowerCase() },
     });
 
     if (!user) {

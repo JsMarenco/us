@@ -13,7 +13,7 @@ export const ssr = true;
 const { username } = Astro.params;
 
 const user = await prisma.user.findUnique({
-  where: { username },
+  where: { username: username?.toString().toLowerCase() },
 });
 
 if (!user) {
