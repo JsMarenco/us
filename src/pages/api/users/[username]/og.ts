@@ -5,20 +5,19 @@ import type { APIRoute } from "astro";
 import prisma from "../../../../lib/prisma";
 import sendResponse from "../../../../utils/sendResponse";
 import httpStatus from "../../../../constants/httpStatus";
-import generateDeYoPaTuOgImage from "../../../../utils/images/og/generateDeYoPaTu";
+import generateUserProfileOGImage from "../../../../utils/images/og/generateUserProfile";
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params }) => {
-  const { id } = params;
+  const { username } = params;
 
   try {
-    const deYoPaTu = await prisma.deYoPaTu.findUnique({
-      where: { id: String(id) },
-      include: { creator: true },
+    const user = await prisma.user.findUnique({
+      where: { username: String(username) },
     });
 
-    if (!deYoPaTu) {
+    if (!user) {
       return sendResponse({
         data: { error: "No encontrado" },
         message: "El recurso no existe.",
@@ -27,7 +26,7 @@ export const GET: APIRoute = async ({ params }) => {
       });
     }
 
-    return generateDeYoPaTuOgImage({ deYoPaTu, creator: deYoPaTu.creator });
+    return generateUserProfileOGImage({ user });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);

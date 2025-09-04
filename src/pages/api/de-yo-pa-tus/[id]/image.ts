@@ -5,7 +5,7 @@ import type { APIRoute } from "astro";
 import prisma from "../../../../lib/prisma";
 import sendResponse from "../../../../utils/sendResponse";
 import httpStatus from "../../../../constants/httpStatus";
-import generateDeYoPaTuOgImage from "../../../../utils/images/og/generateDeYoPaTu";
+import generateDeYoPaTuImage from "../../../../utils/images/generateDeYoPaTuImage";
 
 export const prerender = false;
 
@@ -27,7 +27,7 @@ export const GET: APIRoute = async ({ params }) => {
       });
     }
 
-    return generateDeYoPaTuOgImage({ deYoPaTu, creator: deYoPaTu.creator });
+    return generateDeYoPaTuImage({ deYoPaTu, creator: deYoPaTu.creator });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);

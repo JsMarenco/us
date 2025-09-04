@@ -20,7 +20,7 @@ if (!user) {
   return Astro.redirect("/de-yo-pa-tu");
 }
 
-const { firstName, lastName, avatarSrc, bio } = user;
+const { firstName, lastName, bio } = user;
 
 const allDeYoPaTus = await prisma.deYoPaTu.findMany({
   where: { creatorId: user.id },
@@ -34,7 +34,7 @@ const createdDeYoPaTus = allDeYoPaTus.filter(
 <Layout
   description={bio ||
     `DeYoPaTus creados por ${firstName || lastName ? `${firstName ?? ""} ${lastName ?? ""}`.trim() : username}.`}
-  image={avatarSrc || "/assets/thumbnails/home.png"}
+  image={`/api/users/${username}/og`}
   title={`${firstName || lastName ? `${firstName ?? ""} ${lastName ?? ""}`.trim() : username} (@${username})`}
 >
   <UserProfile createdDeYoPaTus={createdDeYoPaTus} user={user} />

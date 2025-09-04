@@ -177,14 +177,20 @@ export default function EditUserForm() {
               />
             </div>
 
-            <textarea
-              name="bio"
-              value={form.bio || ""}
-              placeholder="Escribe tus cosas lindas..."
-              rows={12}
-              onChange={handleChange}
-              className="col-span-full w-full rounded-xl border border-white/30 bg-white/20 px-4 py-3 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all focus:border-green-400 focus:ring-2 focus:ring-green-200/50 dark:border-gray-700/50 dark:bg-gray-800/30 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-green-700/50"
-            />
+            <div className="space-y-2">
+              <textarea
+                name="bio"
+                value={form.bio || ""}
+                placeholder="Escribe tus cosas lindas..."
+                rows={12}
+                onChange={handleChange}
+                className="col-span-full w-full rounded-xl border border-white/30 bg-white/20 px-4 py-3 text-gray-800 placeholder-gray-500 shadow-md backdrop-blur-sm transition-all focus:border-green-400 focus:ring-2 focus:ring-green-200/50 dark:border-gray-700/50 dark:bg-gray-800/30 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-green-700/50"
+              />
+
+              <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                {`Máximo 300 caracteres. (${form.bio?.length || 0}/300)`}
+              </p>
+            </div>
           </FormSection>
 
           <FormSection subtitle="Cambiar contraseña">
